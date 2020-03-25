@@ -20,9 +20,9 @@ The OpenMediation project includes three parts: server, dashboard, and SDK. It i
 
 - [OM-iOS-SDK](https://github.com/AdTiming/OpenMediation-iOS): iOS Mediation SDK, responsible for mediating third-party AdNetwork iOS SDKs
 
-- OM-DS-UI: Dashboard frontend
+- [OM-Dashboard-UI](https://github.com/AdTiming/OM-Dashboard-UI): Dashboard frontend
 
-- OM-DS-Server: Dashboard backend
+- [OM-Dashboard-Server](https://github.com/AdTiming/OM-Dashboard-Server): Dashboard backend
 
 ## Communication
 
