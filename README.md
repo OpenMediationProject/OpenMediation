@@ -26,12 +26,49 @@ The OpenMediation project includes three parts: server, dashboard, and SDK. It i
 
 ## Docker images on docker hub
 
+Pre-built docker images can be pulled from docker hub:
 - OM-Server: `docker pull adtiming/omserver`
 - OM-Adc: `docker pull adtiming/omadc`
 - OM-Dtask: `docker pull adtiming/omdtask`
 - OM-Dashboard-UI: `docker pull adtiming/omnginx`
 - OM-Dashboard-Server: `docker pull adtiming/omdsserver`
 
+Check each container's log output like this:
+
+    docker exec -it $(docker ps | grep omserver | awk '{print $1}' ) tail -f /om-server/log/stdout.log
+
+## DB init
+
+Run [DB init script](https://github.com/AdTiming/OpenMediation/blob/master/om-init.sql.gz) after creating your database.
+
+## AWS S3 and Athena 
+
+AWS S3 and Athena has been used in this project for data storage and analytics. If you choose to use them, the S3 bucket info needs to be stored in your database: 
+
+    update om_server_dcenter set s3_status=1,s3_region='{region}',s3_bucket='{bucket}';
+
+Besides, an IAM role with proper S3 and Athena access needs to be created and assigned to your EC2 instance or container Task where your code resides.
+
+## Deployment verification
+
+- omdtask
+
+    `curl 'http://omdtask-ip:19012/snode/config/get?id=1&dcenter=1'`
+    gives a valid response.
+- omserver
+
+    `curl "http://omserver-ip:19011"`  gives a `om-server` response. omserver verified.
+
+    `curl "http://domain"` gives a `om-server` response. nginx 80 verified.
+   
+    `curl "https://domain"`  gives a `om-server` response. nginx 443 verified.
+ - omadc
+
+    `curl "http://omadc-ip:19014"`  gives a `om-adc` response. omadc verified.
+
+ - Dashboard UI & omdsserver
+ 
+   omnginx domain can be successfully visited.
 
 ## Communication
 
