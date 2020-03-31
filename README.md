@@ -5,7 +5,7 @@ OpenMediation is a fully open mediation platform, providing an end-to-end system
 - Comprehensive support for more than 10 major AdNetwork, including admob, Facebook, applovin, unity, vungle, adcolony, tapjoy, chartboost, mopub, ironsrc, tiktok, Mintegral, tencentAds, to ensure maximum revenue
 
 - Featured smart ad inventory and automatic waterfall optimization technology to ensure highest ad loading performance and fill rate of 99%+ (* with proper Waterfall level configuration), with historical data driven realtime optimization capacity
-- Supports IAB specifications complied headerbidding to maximize revenue through real-time bidding
+- Header bidding in compliance with IAB specifications is supported to maximize revenue through realtime bidding. OpenMediation has built-in support for Facebook bidding. Its SDK auction mechanism brings flexibility and convenience by eliminating the need for an auction server. The Auction process works perfectly together with traditional waterfall. Before the waterfall starts, the auction returns a bid winner from Facebook and other AdNetworks that support header bidding. The waterfall winner, coming out of the waterfall process that is largely based on historical data, is compared with the bid winner to eventually determine the final winner.
 - Docker container images and deployment automation on popular public cloud such as AWS ECS/EKS, combined with S3 + Athena lightweight data analytics solutions, makes running a powerful advertising mediation system easy
 
 The OpenMediation project includes three parts: server, dashboard, and SDK. It is divided into seven sub-projects, as follows:
