@@ -66,7 +66,11 @@ Besides, an IAM role with proper S3 and Athena access needs to be created and as
 
     `curl "http://omadc-ip:19014"`  gives a `om-adc` response. omadc verified.
 
- - Dashboard UI & omdsserver
+ - omdsserver
+ 
+   `curl "http://omdsserver-ip:19013/api/check"`  gives a HTTP 200 response. omdsserver verified.
+ 
+ - Dashboard UI 
  
    omnginx domain can be successfully visited.
 
