@@ -39,7 +39,7 @@ Check each container's log output like this:
 
 ## DB init
 
-Run [DB init script](https://github.com/AdTiming/OpenMediation/blob/master/om-init.sql.gz) after creating your database.
+Run [DB init script](https://github.com/AdTiming/OpenMediation/blob/master/om-init.sql.gz) after creating your database. Recommended MySQL version: **5.7** or lower.
 
 ## AWS S3 and Athena 
 
