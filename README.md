@@ -77,7 +77,7 @@ Besides, an IAM role with proper S3 and Athena access needs to be created and as
    
 ## Bring your own IP Geolocation Database
 
-An IP Geolocation Database is used to help determine your app user's location. Use your own version of database in OM-Dtask and modify the code accordingly in OM-Sever.
+An IP Geolocation Database is used to help determine your app user's location. Put your own version of database in OM-Dtask's ./cache/ and implement [GeoService](https://github.com/AdTiming/OM-Server/blob/master/src/main/java/com/adtiming/om/server/service/GeoService.java) accordingly.
 
 ## Communication
 
