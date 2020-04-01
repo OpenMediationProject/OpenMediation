@@ -73,6 +73,11 @@ Besides, an IAM role with proper S3 and Athena access needs to be created and as
  - Dashboard UI 
  
    omnginx domain can be successfully visited.
+   
+   
+## Bring your own IP Geolocation Database
+
+An IP Geolocation Database is used to help determine your app user's location. Use your own version of database in OM-Dtask and modify the code accordingly in OM-Sever.
 
 ## Communication
 
