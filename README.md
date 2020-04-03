@@ -79,6 +79,9 @@ Besides, an IAM role with proper S3 and Athena access needs to be created and as
 
 An IP Geolocation Database is used to help determine your app user's location. Put your own version of database in OM-Dtask's ./cache/ and implement [GeoService](https://github.com/AdTiming/OM-Server/blob/master/src/main/java/com/adtiming/om/server/service/GeoService.java) accordingly.
 
+## Add an unlisted AdNetwork to your mediation 
+Refer to  the [guide](https://github.com/AdTiming/OpenMediation/wiki#%E5%A2%9E%E5%8A%A0%E4%B8%80%E5%AE%B6%E6%96%B0%E7%9A%84adnetwork%E9%9C%80%E8%A6%81%E7%9A%84%E6%AD%A5%E9%AA%A4) in the [Wiki section](https://github.com/AdTiming/OpenMediation/wiki).
+
 ## Communication
 
 - If you **found a bug**, _and can provide steps to reliably reproduce it_, open an issue.
