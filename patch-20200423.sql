@@ -1,3 +1,4 @@
+INSERT INTO `um_role_permission` (`role_id`, `permission_id`, `create_time`) VALUES (20, 2202, '2020-03-05 07:08:09');
 UPDATE `om_adnetwork` SET `ios_adtype` = '15' WHERE `id` = '9';
 UPDATE `om_adnetwork` SET `status` = '1', `android_adtype` = '0', `publisher_visible` = '1' WHERE `id` = '6';
 INSERT INTO `om_adnetwork` VALUES (15, 'ironSource', 'IronSource', 0, 13, 0, NULL, 'IronSource', 1, 1, '2020-03-17 14:32:19', '2020-03-17 14:32:19');
