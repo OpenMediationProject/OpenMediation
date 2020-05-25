@@ -6,5 +6,5 @@ ALTER TABLE report_adnetwork_account ADD COLUMN `auth_type` TINYINT(3) NOT NULL 
 ALTER TABLE report_adnetwork_account ADD COLUMN `currency` VARCHAR(3) NOT NULL DEFAULT 'USD' AFTER `auth_type`;
 ALTER TABLE report_adnetwork_account ADD COLUMN `reason` VARCHAR(2000) NULL DEFAULT NULL AFTER `status`;
 UPDATE om_placement_rule_segment SET gender=0;
-ALTER TABLE om_placement_rule add `channel` varchar(100) DEFAULT NULL COMMENT '国内Android channel 定向, 换行分隔' after iap_max,add `channel_bow` tinyint(3) NOT NULL DEFAULT '1' COMMENT 'channel 定向方式, 0:黑名单,1:白名单' after channel,add `model_type` int(10) unsigned DEFAULT '0' COMMENT '设备类型定向,二进制,位置:{0:Phone,1:Pad,2:TV}' after channel_bow,modify `gender` tinyint(3) NOT NULL DEFAULT '0' COMMENT '性别定向二进制, 位置{0:男,1:女}';
+ALTER TABLE om_placement_rule_segment add `channel` varchar(100) DEFAULT NULL COMMENT '国内Android channel 定向, 换行分隔' after iap_max,add `channel_bow` tinyint(3) NOT NULL DEFAULT '1' COMMENT 'channel 定向方式, 0:黑名单,1:白名单' after channel,add `model_type` int(10) unsigned DEFAULT '0' COMMENT '设备类型定向,二进制,位置:{0:Phone,1:Pad,2:TV}' after channel_bow,modify `gender` tinyint(3) NOT NULL DEFAULT '0' COMMENT '性别定向二进制, 位置{0:男,1:女}';
 ALTER TABLE om_placement add `inventory_interval_step` varchar(100) DEFAULT NULL COMMENT '自动补库存阈值间隔, 多行分隔, 单行格式: "{连续失败次数}:{间隔}"' after `inventory_interval`; 
