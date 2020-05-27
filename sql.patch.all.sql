@@ -100,3 +100,4 @@ ALTER TABLE om_placement_rule_segment add `channel` varchar(100) DEFAULT NULL CO
 ALTER TABLE om_placement add `inventory_interval_step` varchar(100) DEFAULT NULL COMMENT '自动补库存阈值间隔, 多行分隔, 单行格式: "{连续失败次数}:{间隔}"' after `inventory_interval`; 
 --20200526
 UPDATE um_permission SET `api_path` = '/sdk/dev_app/get\n/sdk/adnetworks\n/sdk/adnetwork/placements\n/sdk/devices\n/sdk/dev_app/dev_result/update\n/sdk/device/create\n/sdk/dev_app/create\n/sdk/dev_app/operation\n/sdk/device/delete' WHERE (`id` = '2600');
+ALTER TABLE om_adnetwork_app_change ADD COLUMN `new_report_account_id` INT(11) NOT NULL DEFAULT 0 AFTER `report_account_id`;
