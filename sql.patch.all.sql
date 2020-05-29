@@ -101,3 +101,7 @@ ALTER TABLE om_placement add `inventory_interval_step` varchar(100) DEFAULT NULL
 --20200526
 UPDATE um_permission SET `api_path` = '/sdk/dev_app/get\n/sdk/adnetworks\n/sdk/adnetwork/placements\n/sdk/devices\n/sdk/dev_app/dev_result/update\n/sdk/device/create\n/sdk/dev_app/create\n/sdk/dev_app/operation\n/sdk/device/delete' WHERE (`id` = '2600');
 ALTER TABLE om_adnetwork_app_change ADD COLUMN `new_report_account_id` INT(11) NOT NULL DEFAULT 0 AFTER `report_account_id`;
+
+--20200529
+INSERT INTO um_role_permission (`role_id`, `permission_id`) VALUES ('20', '1501');
+INSERT INTO um_role_permission (`role_id`, `permission_id`) VALUES ('20', '1502');
