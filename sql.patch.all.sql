@@ -105,3 +105,6 @@ ALTER TABLE om_adnetwork_app_change ADD COLUMN `new_report_account_id` INT(11) N
 --20200529
 INSERT INTO um_role_permission (`role_id`, `permission_id`) VALUES ('20', '1501');
 INSERT INTO um_role_permission (`role_id`, `permission_id`) VALUES ('20', '1502');
+
+--20200605
+ALTER TABLE stat_lr ADD COLUMN scene_id INT(11) NOT NULL DEFAULT 0 AFTER `instance_id`;
