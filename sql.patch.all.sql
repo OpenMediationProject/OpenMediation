@@ -120,3 +120,5 @@ ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 BINARY NOT NULL DEFAULT '
 ADD COLUMN `exchange_rate` decimal(16,6) NOT NULL DEFAULT '0.000000' AFTER `currency`,
 ADD COLUMN `cost_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' AFTER `cost`,
 ADD COLUMN `revenue_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'Revenue' AFTER `revenue`;
+ALTER TABLE `report_adnetwork_task`
+ADD COLUMN `time_dimension` tinyint(3) NOT NULL DEFAULT '1' COMMENT 'Time Dimensions，0:Hour，1:Day' AFTER `run_count`;
