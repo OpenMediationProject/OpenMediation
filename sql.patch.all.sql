@@ -121,4 +121,6 @@ ADD COLUMN `exchange_rate` decimal(16,6) NOT NULL DEFAULT '0.000000' AFTER `curr
 ADD COLUMN `cost_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' AFTER `cost`,
 ADD COLUMN `revenue_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'Revenue' AFTER `revenue`;
 ALTER TABLE `report_adnetwork_task`
+ADD COLUMN `auth_type` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0:开发者账号授权拉取,1:adt账号联合登录授权方式,2:无需授权，开发者自有账号拉取' AFTER `credential_path`,
+ADD COLUMN  `currency` varchar(3) NOT NULL DEFAULT 'USD' AFTER `auth_type`,
 ADD COLUMN `time_dimension` tinyint(3) NOT NULL DEFAULT '1' COMMENT 'Time Dimensions，0:Hour，1:Day' AFTER `run_count`;
