@@ -108,3 +108,15 @@ INSERT INTO um_role_permission (`role_id`, `permission_id`) VALUES ('20', '1502'
 
 --20200605
 ALTER TABLE stat_lr ADD COLUMN scene_id INT(11) NOT NULL DEFAULT 0 AFTER `instance_id`;
+
+--20200610
+ALTER TABLE `report_adnetwork_linked`
+ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 BINARY NOT NULL DEFAULT 'USD' AFTER `abt`,
+ADD COLUMN `exchange_rate` decimal(16,6) NOT NULL DEFAULT '0.000000' AFTER `currency`,
+ADD COLUMN `cost_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' AFTER `cost`,
+ADD COLUMN `revenue_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'Revenue' AFTER `revenue`;
+ALTER TABLE `stat_adnetwork`
+ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 BINARY NOT NULL DEFAULT 'USD' AFTER `abt`,
+ADD COLUMN `exchange_rate` decimal(16,6) NOT NULL DEFAULT '0.000000' AFTER `currency`,
+ADD COLUMN `cost_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' AFTER `cost`,
+ADD COLUMN `revenue_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'Revenue' AFTER `revenue`;
