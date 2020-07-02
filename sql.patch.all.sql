@@ -126,4 +126,7 @@ ADD COLUMN  `currency` varchar(3) NOT NULL DEFAULT 'USD' AFTER `auth_type`,
 ADD COLUMN `time_dimension` tinyint(3) NOT NULL DEFAULT '1' COMMENT 'Time Dimensions，0:Hour，1:Day' AFTER `run_count`;
 
 -- 20200611
-UPDATE om_adnetwork SET bid_endpoint='http://hb.rayjump.com/bid' where id=14;
+UPDATE om_adnetwork SET bid_endpoint='http://hb.rayjump.com/bid' WHERE id=14;
+
+-- 20200702
+UPDATE um_permission SET title='Ad Network Accounts', name='accounts' WHERE id=31
