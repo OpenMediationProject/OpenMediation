@@ -51,7 +51,7 @@ CREATE TABLE `report_ironsource` (
  PARTITION p202010 VALUES LESS THAN (738095) ENGINE = InnoDB,
  PARTITION p202011 VALUES LESS THAN (738125) ENGINE = InnoDB,
  PARTITION p202012 VALUES LESS THAN (738156) ENGINE = InnoDB) */;
- 
+
 DELETE FROM `om_adnetwork` WHERE id<16;
 INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`, `create_time`, `lastmodify`)
 VALUES
@@ -70,7 +70,7 @@ VALUES
 	(13, X'74696B746F6B', X'54696B546F6B', 12, 15, 15, X'', X'54696B746F6B', 1, 1, '2020-01-15 11:31:18', '2020-04-24 14:54:06'),
 	(14, X'6D696E74656772616C', X'4D696E74656772616C', 14, 13, 12, X'', X'4D696E74656772616C', 1, 1, '2020-01-15 11:31:18', '2020-01-15 11:31:18'),
 	(15, X'69726F6E536F75726365', X'49726F6E536F75726365', 0, 13, 13, NULL, X'49726F6E536F75726365', 1, 1, '2020-03-17 14:32:19', '2020-04-24 14:46:11');
-  
+
 ALTER TABLE `om_adnetwork` ADD `bid_endpoint` VARCHAR(200)  NULL  DEFAULT NULL  AFTER `publisher_visible`;
 UPDATE `om_adnetwork` SET bid_endpoint='https://sdk.adtiming.com/a/bid/v1' where id=1;
 UPDATE `om_adnetwork` SET bid_endpoint='https://an.facebook.com/${PLATFORM_ID}/placementbid.ortb' where id=3;
@@ -97,7 +97,7 @@ ALTER TABLE report_adnetwork_account ADD COLUMN `currency` VARCHAR(3) NOT NULL D
 ALTER TABLE report_adnetwork_account ADD COLUMN `reason` VARCHAR(2000) NULL DEFAULT NULL AFTER `status`;
 UPDATE om_placement_rule_segment SET gender=0;
 ALTER TABLE om_placement_rule_segment add `channel` varchar(100) DEFAULT NULL COMMENT '国内Android channel 定向, 换行分隔' after iap_max,add `channel_bow` tinyint(3) NOT NULL DEFAULT '1' COMMENT 'channel 定向方式, 0:黑名单,1:白名单' after channel,add `model_type` int(10) unsigned DEFAULT '0' COMMENT '设备类型定向,二进制,位置:{0:Phone,1:Pad,2:TV}' after channel_bow,modify `gender` tinyint(3) NOT NULL DEFAULT '0' COMMENT '性别定向二进制, 位置{0:男,1:女}';
-ALTER TABLE om_placement add `inventory_interval_step` varchar(100) DEFAULT NULL COMMENT '自动补库存阈值间隔, 多行分隔, 单行格式: "{连续失败次数}:{间隔}"' after `inventory_interval`; 
+ALTER TABLE om_placement add `inventory_interval_step` varchar(100) DEFAULT NULL COMMENT '自动补库存阈值间隔, 多行分隔, 单行格式: "{连续失败次数}:{间隔}"' after `inventory_interval`;
 -- 20200526
 UPDATE um_permission SET `api_path` = '/sdk/dev_app/get\n/sdk/adnetworks\n/sdk/adnetwork/placements\n/sdk/devices\n/sdk/dev_app/dev_result/update\n/sdk/device/create\n/sdk/dev_app/create\n/sdk/dev_app/operation\n/sdk/device/delete' WHERE (`id` = '2600');
 ALTER TABLE om_adnetwork_app_change ADD COLUMN `new_report_account_id` INT(11) NOT NULL DEFAULT 0 AFTER `report_account_id`;
@@ -131,3 +131,18 @@ UPDATE om_adnetwork SET bid_endpoint='http://hb.rayjump.com/bid' WHERE id=14;
 -- 20200702
 UPDATE um_permission SET title='Ad Network Accounts', name='accounts' WHERE id=31
 ALTER TABLE om_adnetwork_app_change DROP  PRIMARY  KEY;
+
+-- 20200707
+alter table om_placement_rule_segment
+    add `age_min` int(11) NOT NULL DEFAULT '0' after `gender`,
+    add `age_max` int(11) NOT NULL DEFAULT '0' after `age_min`;
+
+ALTER TABLE `om_currency_exchange` CHANGE `id` `id` INT(11)  UNSIGNED  NOT NULL  AUTO_INCREMENT;
+ALTER TABLE `om_currency_exchange_day` CHANGE `id` `id` INT(11)  UNSIGNED  NOT NULL  AUTO_INCREMENT;
+
+alter table stat_lr
+    add `bid_req` int(10) NOT NULL DEFAULT '0' COMMENT 'BidRequestCount',
+    add `bid_resp` int(10) NOT NULL DEFAULT '0' COMMENT 'BidResponseCount',
+    add `bid_resp_price` decimal(16,6) NOT NULL DEFAULT '0' COMMENT 'sum(BidResponsePrice)',
+    add `bid_win` int(10) NOT NULL DEFAULT '0' COMMENT 'Bid Win Count',
+    add `bid_win_price` decimal(16,6) NOT NULL DEFAULT '0' COMMENT 'sum(BidWinPrice)';
