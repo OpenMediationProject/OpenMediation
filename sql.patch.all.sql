@@ -146,3 +146,6 @@ alter table stat_lr
     add `bid_resp_price` decimal(16,6) NOT NULL DEFAULT '0' COMMENT 'sum(BidResponsePrice)',
     add `bid_win` int(10) NOT NULL DEFAULT '0' COMMENT 'Bid Win Count',
     add `bid_win_price` decimal(16,6) NOT NULL DEFAULT '0' COMMENT 'sum(BidWinPrice)';
+
+-- 20200713
+INSERT INTO `om_currency_exchange` (`id`, `cur_from`, `cur_to`, `exchange_rate`, `create_time`, `lastmodify`) VALUES (92, X'555344', X'555344', 1.000000, '2020-07-07 14:39:17', '2020-07-07 14:39:17');
