@@ -149,3 +149,7 @@ alter table stat_lr
 
 -- 20200713
 INSERT INTO `om_currency_exchange` (`id`, `cur_from`, `cur_to`, `exchange_rate`, `create_time`, `lastmodify`) VALUES (92, X'555344', X'555344', 1.000000, '2020-07-07 14:39:17', '2020-07-07 14:39:17');
+
+-- 20200720
+alter table stat_lr
+    add `bid` tinyint(3) NOT NULL DEFAULT '0' COMMENT 'isBidReleated, {0:NO,1:YES}';
