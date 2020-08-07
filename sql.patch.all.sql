@@ -129,7 +129,7 @@ ADD COLUMN `time_dimension` tinyint(3) NOT NULL DEFAULT '1' COMMENT 'Time Dimens
 UPDATE om_adnetwork SET bid_endpoint='http://hb.rayjump.com/bid' WHERE id=14;
 
 -- 20200702
-UPDATE um_permission SET title='Ad Network Accounts', name='accounts' WHERE id=31
+UPDATE um_permission SET title='Ad Network Accounts', name='accounts' WHERE id=31;
 ALTER TABLE om_adnetwork_app_change DROP  PRIMARY  KEY;
 
 -- 20200707
