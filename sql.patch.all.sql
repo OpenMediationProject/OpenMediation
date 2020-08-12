@@ -188,3 +188,5 @@ FROM
     report_adnetwork_account AS account ON app.report_account_id = account.id
 WHERE
     account.publisher_id > 0);
+    
+ALTER TABLE om_publisher_app DROP INDEX `app_id` ;
