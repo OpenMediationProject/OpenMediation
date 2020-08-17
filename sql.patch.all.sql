@@ -250,3 +250,8 @@ VALUES
 	(49, 3, '0', 'Illegal character in path at index', 'getJsonData error,error:Illegal character in path at index 84: https://monetization.api.unity.com/stats/v1/operate/organizations/Gudiance-Unity-ORG ID?apikey=1232134213124124121&fields=adrequest_count,start_count,view_count,available_sum,revenue_sum&groupBy=game,platform,placement,country&start=2020-08-13T07:00:00.000Z&end=2020-08-13T07:59:59.999Z&scale=hour', 'Invalid Monetization Stats API key.', NULL, 0, 0, '2020-08-13 19:40:36', '2020-08-13 20:02:07'),
 	(55, 11, '0', 'downJsonData failed', 'Invalid Configuration', NULL, NULL, 0, 0, '2020-08-14 11:25:28', '2020-08-14 11:32:31'),
 	(56, 1, '0', 'Invalid Configuration', 'Invalid Configuration', 'Invalid Configuration.\nYou can login with google account on the Adnetwork Page.', NULL, 0, 0, '2020-08-14 11:28:24', '2020-08-14 11:31:47');
+
+-- 20200817
+ALTER TABLE om_adnetwork CHANGE COLUMN `class_name` `class_name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'SDK className prefix' ;
+INSERT INTO om_adnetwork (`id`,`name`,`class_name`,`type`,`ios_adtype`,`android_adtype`,`sdk_version`,`descn`,`status`,`publisher_visible`,`bid_endpoint`,`create_time`,`lastmodify`) VALUES (17,'ChartboostBid','ChartboostBid',12,12,12,'','ChartboostBid',0,1,NULL,'2020-07-10 15:49:00','2020-07-28 15:44:30');
+INSERT INTO om_adnetwork (`id`,`name`,`class_name`,`type`,`ios_adtype`,`android_adtype`,`sdk_version`,`descn`,`status`,`publisher_visible`,`bid_endpoint`,`create_time`,`lastmodify`) VALUES (30,'fyber','Fyber',1,1,1,NULL,'Fyber',1,1,NULL,'2020-04-28 10:46:33','2020-04-28 15:22:50');
