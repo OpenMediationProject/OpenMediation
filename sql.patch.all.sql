@@ -255,3 +255,7 @@ VALUES
 ALTER TABLE om_adnetwork CHANGE COLUMN `class_name` `class_name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'SDK className prefix' ;
 INSERT INTO om_adnetwork (`id`,`name`,`class_name`,`type`,`ios_adtype`,`android_adtype`,`sdk_version`,`descn`,`status`,`publisher_visible`,`bid_endpoint`,`create_time`,`lastmodify`) VALUES (17,'ChartboostBid','ChartboostBid',12,12,12,'','ChartboostBid',0,1,NULL,'2020-07-10 15:49:00','2020-07-28 15:44:30');
 INSERT INTO om_adnetwork (`id`,`name`,`class_name`,`type`,`ios_adtype`,`android_adtype`,`sdk_version`,`descn`,`status`,`publisher_visible`,`bid_endpoint`,`create_time`,`lastmodify`) VALUES (30,'fyber','Fyber',1,1,1,NULL,'Fyber',1,1,NULL,'2020-04-28 10:46:33','2020-04-28 15:22:50');
+
+-- 20200821
+INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`, `bid_endpoint`, `create_time`, `lastmodify`) VALUES (18, X'4D696E74', X'4D696E74', 15, 15, 15, X'', X'4D696E74', 1, 1, NULL, '2020-08-20 17:20:42', '2020-08-21 14:32:14');
+
