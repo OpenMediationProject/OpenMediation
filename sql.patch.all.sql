@@ -259,3 +259,32 @@ INSERT INTO om_adnetwork (`id`,`name`,`class_name`,`type`,`ios_adtype`,`android_
 -- 20200821
 INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`, `bid_endpoint`, `create_time`, `lastmodify`) VALUES (18, X'4D696E74', X'4D696E74', 15, 15, 15, X'', X'4D696E74', 1, 1, NULL, '2020-08-20 17:20:42', '2020-08-21 14:32:14');
 
+-- 20200828
+CREATE TABLE `report_mint` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL DEFAULT '0000-00-00',
+  `country` varchar(3) DEFAULT NULL COMMENT 'country alpha2',
+  `platform` varchar(50) DEFAULT NULL COMMENT 'Platform Android/iOS',
+  `app_id` varchar(50) DEFAULT NULL COMMENT 'Mint App ID',
+  `tag_id` varchar(50) DEFAULT NULL COMMENT 'Mint Placement ID',
+  `request` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'mint request count',
+  `fill` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'mint request count',
+  `impression` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'mint impression count',
+  `click` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'mint click count',
+  `revenue` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'mint revenue',
+  `app_key` varchar(100) DEFAULT '',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`),
+  KEY `country` (`country`),
+  KEY `day` (`day`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+/*!50100 PARTITION BY RANGE (to_days(`day`))
+(PARTITION p202008 VALUES LESS THAN (738034) ENGINE = InnoDB,
+ PARTITION p202009 VALUES LESS THAN (738064) ENGINE = InnoDB,
+ PARTITION p202010 VALUES LESS THAN (738095) ENGINE = InnoDB,
+ PARTITION p202011 VALUES LESS THAN (738125) ENGINE = InnoDB,
+ PARTITION p202012 VALUES LESS THAN (738156) ENGINE = InnoDB) */;
+
+INSERT INTO `report_adnetwork_error` (`id`, `adn_id`, `error_code`, `reason`, `content`, `solution`, `solution_cn`, `is_ignore`, `status`, `create_time`, `lastmodify`) VALUES (42, 18, '10012', 'invalid token', NULL, NULL, NULL, 0, 0, '2020-08-28 14:26:14', '2020-08-28 14:27:35');
+ 
