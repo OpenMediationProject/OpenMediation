@@ -290,3 +290,5 @@ INSERT INTO `report_adnetwork_error` (`id`, `adn_id`, `error_code`, `reason`, `c
 
 ALTER TABLE report_adnetwork_linked
 ADD COLUMN `report_account_id` int(11) NOT NULL DEFAULT '0' COMMENT 'report_adnetwork_account.id' AFTER `adn_placement_key`;
+ALTER TABLE stat_adnetwork
+ADD COLUMN `report_account_id` int(11) NOT NULL DEFAULT '0' COMMENT 'report_adnetwork_account.id' AFTER `adn_account_key`;
