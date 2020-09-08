@@ -287,4 +287,6 @@ CREATE TABLE `report_mint` (
  PARTITION p202012 VALUES LESS THAN (738156) ENGINE = InnoDB) */;
 
 INSERT INTO `report_adnetwork_error` (`id`, `adn_id`, `error_code`, `reason`, `content`, `solution`, `solution_cn`, `is_ignore`, `status`, `create_time`, `lastmodify`) VALUES (42, 18, '10012', 'invalid token', NULL, NULL, NULL, 0, 0, '2020-08-28 14:26:14', '2020-08-28 14:27:35');
- 
+
+ALTER TABLE report_adnetwork_linked
+ADD COLUMN `report_account_id` int(11) NOT NULL DEFAULT '0' COMMENT 'report_adnetwork_account.id' AFTER `adn_placement_key`;
