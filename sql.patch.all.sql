@@ -292,3 +292,28 @@ ALTER TABLE report_adnetwork_linked
 ADD COLUMN `report_account_id` int(11) NOT NULL DEFAULT '0' COMMENT 'report_adnetwork_account.id' AFTER `adn_placement_key`;
 ALTER TABLE stat_adnetwork
 ADD COLUMN `report_account_id` int(11) NOT NULL DEFAULT '0' COMMENT 'report_adnetwork_account.id' AFTER `adn_account_key`;
+
+-- 2020-09-10
+CREATE TABLE `report_helium` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL DEFAULT '0000-00-00',
+  `country` varchar(30) DEFAULT NULL COMMENT '国家',
+  `app` varchar(200) DEFAULT NULL COMMENT 'app id',
+  `demand_source` varchar(100) DEFAULT NULL COMMENT 'demand_source',
+  `helium_placement_name` varchar(200) DEFAULT NULL COMMENT 'helium_placement_name',
+  `placement_type` varchar(50) DEFAULT NULL COMMENT 'Placement Type',
+  `requests` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '请求次数',
+  `valid_bids` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '有效出价次数',
+  `winning_bids` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'win bid次数',
+  `impressions` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '展示次数',
+  `estimated_earnings` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '预估收入',
+  `user_id` varchar(100) DEFAULT '',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p202009 VALUES LESS THAN (738064) ENGINE = InnoDB,
+ PARTITION p202010 VALUES LESS THAN (738095) ENGINE = InnoDB,
+ PARTITION p202011 VALUES LESS THAN (738125) ENGINE = InnoDB,
+ PARTITION p202012 VALUES LESS THAN (738156) ENGINE = InnoDB);
