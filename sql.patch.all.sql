@@ -373,3 +373,6 @@ VALUES
 	(48, 15, '502', 'Bad Gateway', 'Bad Gateway', 'No further processing required.', '', NULL, 1, 1, '2020-09-10 17:35:40', '2020-09-10 17:35:40'),
 	(49, 15, '503', 'Service Unavailable', 'No server is available to handle this request.', 'No further processing required.', '', NULL, 1, 1, '2020-09-10 17:35:40', '2020-09-10 17:35:40'),
 	(50, 15, '504', 'Gateway Time-out', 'The server didnt respond in time.', 'No further processing required.', '', NULL, 1, 1, '2020-09-10 17:35:40', '2020-09-10 17:35:40');
+
+-- 2020-09-23
+update `om_adnetwork` set status=1 where id=17;
