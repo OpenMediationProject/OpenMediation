@@ -375,4 +375,9 @@ VALUES
 	(50, 15, '504', 'Gateway Time-out', 'The server didnt respond in time.', 'No further processing required.', '', NULL, 1, 1, '2020-09-10 17:35:40', '2020-09-10 17:35:40');
 
 -- 2020-09-23
-update `om_adnetwork` set status=1 where id=17;
+UPDATE `om_adnetwork` SET status=1 WHERE id=17;
+
+-- 2020-09-30
+UPDATE `om_adnetwork` SET `bid_endpoint` = 'https://rtb.api.vungle.com/bid/t/428d94f' WHERE `id` = '5';	
+
+			    
