@@ -1,12 +1,9 @@
 INSERT INTO `um_role_permission` (`role_id`, `permission_id`, `create_time`) VALUES (20, 2202, '2020-03-05 07:08:09');
-UPDATE `om_adnetwork` SET `ios_adtype` = '15' WHERE `id` = '9';
-UPDATE `om_adnetwork` SET `status` = '1', `android_adtype` = '0', `publisher_visible` = '1' WHERE `id` = '6';
-INSERT INTO `om_adnetwork` VALUES (15, 'ironSource', 'IronSource', 0, 13, 0, NULL, 'IronSource', 1, 1, '2020-03-17 14:32:19', '2020-03-17 14:32:19');
 INSERT INTO `om_support_device` (`brand`, `device`, `model`) VALUES ('Apple', 'iPhone', 'iPhone1,1'),('Apple', 'iPhone', 'iPhone1,2'),('Apple', 'iPhone', 'iPhone2,1'),('Apple', 'iPhone', 'iPhone3,1'),('Apple', 'iPhone', 'iPhone3,2'),('Apple', 'iPhone', 'iPhone3,3'),('Apple', 'iPhone', 'iPhone4,1'),('Apple', 'iPhone', 'iPhone5,1'),('Apple', 'iPhone', 'iPhone5,2'),('Apple', 'iPhone', 'iPhone5,3'),('Apple', 'iPhone', 'iPhone5,4'),('Apple', 'iPhone', 'iPhone6,1'),('Apple', 'iPhone', 'iPhone6,2'),('Apple', 'iPhone', 'iPhone7,2'),('Apple', 'iPhone', 'iPhone7,1'),('Apple', 'iPhone', 'iPhone8,1'),('Apple', 'iPhone', 'iPhone8,2'),('Apple', 'iPhone', 'iPhone8,4'),('Apple', 'iPhone', 'iPhone9,1'),('Apple', 'iPhone', 'iPhone9,3'),('Apple', 'iPhone', 'iPhone9,2'),('Apple', 'iPhone', 'iPhone9,4'),('Apple', 'iPhone', 'iPhone10,1'),('Apple', 'iPhone', 'iPhone10,4'),('Apple', 'iPhone', 'iPhone10,2'),('Apple', 'iPhone', 'iPhone10,5'),('Apple', 'iPhone', 'iPhone10,3'),('Apple', 'iPhone', 'iPhone10,6'),('Apple', 'iPhone', 'iPhone11,8'),('Apple', 'iPhone', 'iPhone11,2'),('Apple', 'iPhone', 'iPhone11,6'),('Apple', 'iPhone', 'iPhone11,4'),('Apple', 'iPhone', 'iPhone12,1'),('Apple', 'iPhone', 'iPhone12,3'),('Apple', 'iPhone', 'iPhone12,5'),('Apple', 'iPhone', 'iPhone12,8'),('Apple', 'iPad', 'iPad1,1'),('Apple', 'iPad', 'iPad2,1'),('Apple', 'iPad', 'iPad2,2'),('Apple', 'iPad', 'iPad2,3'),('Apple', 'iPad', 'iPad2,4'),('Apple', 'iPad', 'iPad3,1'),('Apple', 'iPad', 'iPad3,2'),('Apple', 'iPad', 'iPad3,3'),('Apple', 'iPad', 'iPad3,4'),('Apple', 'iPad', 'iPad3,5'),('Apple', 'iPad', 'iPad3,6'),('Apple', 'iPad', 'iPad6,11'),('Apple', 'iPad', 'iPad6,12'),('Apple', 'iPad', 'iPad7,5'),('Apple', 'iPad', 'iPad7,6'),('Apple', 'iPad', 'iPad7,11'),('Apple', 'iPad', 'iPad7,12'),('Apple', 'iPad', 'iPad4,1'),('Apple', 'iPad', 'iPad4,2'),('Apple', 'iPad', 'iPad4,3'),('Apple', 'iPad', 'iPad5,3'),('Apple', 'iPad', 'iPad5,4'),('Apple', 'iPad', 'iPad11,3'),('Apple', 'iPad', 'iPad11,4'),('Apple', 'iPad', 'iPad6,7'),('Apple', 'iPad', 'iPad6,8'),('Apple', 'iPad', 'iPad6,3'),('Apple', 'iPad', 'iPad6,4'),('Apple', 'iPad', 'iPad7,1'),('Apple', 'iPad', 'iPad7,2'),('Apple', 'iPad', 'iPad7,3'),('Apple', 'iPad', 'iPad7,4'),('Apple', 'iPad', 'iPad8,1'),('Apple', 'iPad', 'iPad8,2'),('Apple', 'iPad', 'iPad8,3'),('Apple', 'iPad', 'iPad8,4'),('Apple', 'iPad', 'iPad8,5'),('Apple', 'iPad', 'iPad8,6'),('Apple', 'iPad', 'iPad8,7'),('Apple', 'iPad', 'iPad8,8'),('Apple', 'iPad', 'iPad8,9'),('Apple', 'iPad', 'iPad8,10'),('Apple', 'iPad', 'iPad8,11'),('Apple', 'iPad', 'iPad8,12'),('Apple', 'iPad', 'iPad2,5'),('Apple', 'iPad', 'iPad2,6'),('Apple', 'iPad', 'iPad2,7'),('Apple', 'iPad', 'iPad4,4'),('Apple', 'iPad', 'iPad4,5'),('Apple', 'iPad', 'iPad4,6'),('Apple', 'iPad', 'iPad4,7'),('Apple', 'iPad', 'iPad4,8'),('Apple', 'iPad', 'iPad4,9'),('Apple', 'iPad', 'iPad5,1'),('Apple', 'iPad', 'iPad5,2'),('Apple', 'iPad', 'iPad11,1'),('Apple', 'iPad', 'iPad11,2');
 
-CREATE TABLE `report_ironsource` (
+CREATE TABLE IF NOT EXISTS `report_ironsource` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `date` date NOT NULL DEFAULT '0000-00-00',
+  `date` date NOT NULL,
   `country_code` varchar(30) DEFAULT NULL COMMENT '国家',
   `app_key` varchar(100) DEFAULT NULL COMMENT 'App Key',
   `platform` varchar(10) DEFAULT NULL COMMENT 'iOS,Android',
@@ -75,7 +72,7 @@ ALTER TABLE `om_adnetwork` ADD `bid_endpoint` VARCHAR(200)  NULL  DEFAULT NULL  
 UPDATE `om_adnetwork` SET bid_endpoint='https://sdk.adtiming.com/a/bid/v1' where id=1;
 UPDATE `om_adnetwork` SET bid_endpoint='https://an.facebook.com/${PLATFORM_ID}/placementbid.ortb' where id=3;
 
-CREATE TABLE `om_server_node` (
+CREATE TABLE IF NOT EXISTS `om_server_node` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `nodeid` varchar(50) NOT NULL COMMENT 'nodeid uuid',
   `dcenter` tinyint(3) unsigned NOT NULL COMMENT 'om_server_dcenter.id',
@@ -260,9 +257,9 @@ INSERT INTO om_adnetwork (`id`,`name`,`class_name`,`type`,`ios_adtype`,`android_
 INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`, `bid_endpoint`, `create_time`, `lastmodify`) VALUES (18, X'4D696E74', X'4D696E74', 15, 15, 15, X'', X'4D696E74', 1, 1, NULL, '2020-08-20 17:20:42', '2020-08-21 14:32:14');
 
 -- 20200828
-CREATE TABLE `report_mint` (
+CREATE TABLE IF NOT EXISTS `report_mint` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `day` date NOT NULL DEFAULT '0000-00-00',
+  `day` date NOT NULL,
   `country` varchar(3) DEFAULT NULL COMMENT 'country alpha2',
   `platform` varchar(50) DEFAULT NULL COMMENT 'Platform Android/iOS',
   `app_id` varchar(50) DEFAULT NULL COMMENT 'Mint App ID',
@@ -294,9 +291,9 @@ ALTER TABLE stat_adnetwork
 ADD COLUMN `report_account_id` int(11) NOT NULL DEFAULT '0' COMMENT 'report_adnetwork_account.id' AFTER `adn_account_key`;
 
 -- 2020-09-10
-CREATE TABLE `report_helium` (
+CREATE TABLE IF NOT EXISTS `report_helium` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `day` date NOT NULL DEFAULT '0000-00-00',
+  `day` date NOT NULL,
   `country` varchar(30) DEFAULT NULL COMMENT '国家',
   `app` varchar(200) DEFAULT NULL COMMENT 'app id',
   `demand_source` varchar(100) DEFAULT NULL COMMENT 'demand_source',
