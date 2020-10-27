@@ -325,4 +325,30 @@ UPDATE `om_adnetwork` SET status=1 WHERE id=17;
 -- 2020-09-30
 UPDATE `om_adnetwork` SET `bid_endpoint` = 'https://rtb.api.vungle.com/bid/t/428d94f' WHERE `id` = '5';	
 
-			    
+-- 2020-10-27
+CREATE TABLE `report_tencent` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL DEFAULT '0000-00-00',
+  `member_id` varchar(100) DEFAULT NULL COMMENT '开发者账号',
+  `medium_name` varchar(200) DEFAULT NULL COMMENT '媒体名称',
+  `app_id` varchar(100) DEFAULT NULL COMMENT '媒体id',
+  `placement_id` varchar(100) DEFAULT NULL COMMENT '广告位ID',
+  `placement_name` varchar(200) DEFAULT NULL COMMENT '广告位名称',
+  `placement_type` varchar(100) DEFAULT NULL COMMENT '广告位类型',
+  `is_summary` int(1) DEFAULT NULL COMMENT '是否是summary',
+  `request_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '广告位请求量',
+  `return_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '广告位返回量',
+  `ad_request_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '广告请求量',
+  `ad_return_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '广告返回量',
+  `pv` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '曝光量',
+  `click` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击量',
+  `fill_rate` varchar(100) DEFAULT NULL COMMENT '广告位填充率 (广告位返回量/广告位请求量) return_count/request_count',
+  `ad_exposure_rate` varchar(200) DEFAULT NULL COMMENT '广告曝光率 (曝光量/广告返回量) pv/ad return_count',
+  `click_rate` varchar(200) DEFAULT NULL COMMENT '广告曝光率 (曝光量/广告返回量) pv/ad return_count',
+  `revenue` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '收入（单位：元）',
+  `ecpm` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '收入/曝光量*1000 （单位：元）',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `day` (`day`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
