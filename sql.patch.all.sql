@@ -382,4 +382,4 @@ CREATE TABLE IF NOT EXISTS `stat_user_ltv` (
 (PARTITION p20201107 VALUES LESS THAN (738102) ENGINE = InnoDB) */
 
 INSERT INTO om_dict (pid, name, value, descn) VALUES (100, 'ltv_date_range', 30, '计算LTV的时间跨度, 单位天');
-		    
+UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart' WHERE (`id` = '1800');		    
