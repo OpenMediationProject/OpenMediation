@@ -380,4 +380,6 @@ CREATE TABLE IF NOT EXISTS `stat_user_ltv` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='user ltv, partition by day'
 /*!50100 PARTITION BY RANGE (to_days(`day`))
 (PARTITION p20201107 VALUES LESS THAN (738102) ENGINE = InnoDB) */
-			    
+
+INSERT INTO om_dict (pid, name, value, descn) VALUES (100, 'ltv_date_range', 30, '计算LTV的时间跨度, 单位天');
+		    
