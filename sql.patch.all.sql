@@ -352,3 +352,32 @@ CREATE TABLE `report_tencent` (
   PRIMARY KEY (`id`),
   KEY `day` (`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 2020-11-06			    
+CREATE TABLE IF NOT EXISTS `stat_user_ltv` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL DEFAULT '0000-00-00' COMMENT 'timezone: UTC',
+  `base_date` date NOT NULL,
+  `retention_day` int(10) unsigned NOT NULL DEFAULT '0',
+  `country` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'Country a2',
+  `publisher_id` int(10) unsigned DEFAULT '0' COMMENT 'publisher.id',
+  `pub_app_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+  `user_cnt_new` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `user_cnt_old` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `retention_cnt_new` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `retention_cnt_old` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `mediation_value_new` decimal(16,6) NOT NULL DEFAULT '0.000000',
+  `mediation_value_old` decimal(16,6) NOT NULL DEFAULT '0.000000',
+  `iap_value_new` decimal(16,6) NOT NULL DEFAULT '0.000000',
+  `iap_value_old` decimal(16,6) NOT NULL DEFAULT '0.000000',
+  `total_value_new` decimal(16,6) NOT NULL DEFAULT '0.000000',
+  `total_value_old` decimal(16,6) NOT NULL DEFAULT '0.000000',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`),
+  KEY `day` (`day`),
+  KEY `publisher_id` (`publisher_id`),
+  KEY `pub_app_id` (`pub_app_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='user ltv, partition by day'
+/*!50100 PARTITION BY RANGE (to_days(`day`))
+(PARTITION p20201107 VALUES LESS THAN (738102) ENGINE = InnoDB) */
+			    
