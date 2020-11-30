@@ -377,10 +377,12 @@ CREATE TABLE IF NOT EXISTS `stat_user_ltv` (
   KEY `day` (`day`),
   KEY `publisher_id` (`publisher_id`),
   KEY `pub_app_id` (`pub_app_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='user ltv, partition by day'
+) COMMENT='user ltv, partition by day'
 /*!50100 PARTITION BY RANGE (to_days(`day`))
 (PARTITION p20201107 VALUES LESS THAN (738102) ENGINE = InnoDB) */
-
+			    
+INSERT INTO om_dict (pid, name, value, descn) VALUES (100,'uar_switch', 0, '计算UAR的开关,0:关闭,1:开启');			    
+INSERT INTO om_dict (pid, name, value, descn) VALUES (100,'ltv_switch', 0, '计算LTV的开关,0:关闭,1:开启');
 INSERT INTO om_dict (pid, name, value, descn) VALUES (100, 'ltv_date_range', 30, '计算LTV的时间跨度, 单位天');
 UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart' WHERE (`id` = '1800');		    
 
