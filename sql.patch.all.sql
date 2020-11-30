@@ -387,67 +387,103 @@ INSERT INTO om_dict (pid, name, value, descn) VALUES (100, 'ltv_date_range', 30,
 UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart' WHERE (`id` = '1800');		    
 
 -- 2020-11-30
-CREATE TABLE IF NOT EXISTS `stat_adn_dau` (
-     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-     `day` date NOT NULL COMMENT 'timezone: UTC',
-     `adn_id` int(10) unsigned DEFAULT '0' COMMENT 'Adnetwork id',
-     `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
-     `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
-     `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
-     `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
-     `dau` int(10) unsigned NOT NULL DEFAULT '0',
-     `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
-     `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     PRIMARY KEY (`id`,`day`),
-     KEY `day` (`day`),
-     KEY `adn_id` (`adn_id`)
-     ) COMMENT='DAU & DEU, partition by day';
+CREATE TABLE IF NOT EXISTS `stat_cp`
+(
+    `id`           int(11) UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `day`          date                NOT NULL                           DEFAULT '0000-00-00' COMMENT 'timezone: UTC',
+    `hour`         tinyint(2)          NOT NULL                           DEFAULT '0',
+    `publisher_id` int(10) UNSIGNED    NOT NULL                           DEFAULT '0',
+    `pub_app_id`   int(10) UNSIGNED    NOT NULL                           DEFAULT '0',
+    `placement_id` int(10) UNSIGNED    NOT NULL                           DEFAULT '0',
+    `country`      varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin   DEFAULT NULL COMMENT 'country a2',
+    `app_id`       varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '',
+    `campaign_id`  int(10) UNSIGNED    NOT NULL                           DEFAULT '0',
+    `creative_id`  int(10) UNSIGNED    NOT NULL                           DEFAULT '0',
+    `impr`         bigint(10) UNSIGNED NOT NULL                           DEFAULT '0' COMMENT '展现数',
+    `click`        bigint(10) UNSIGNED NOT NULL                           DEFAULT '0' COMMENT '点击数',
+    `win_price`    decimal(16, 6)      NOT NULL                           DEFAULT '0.000000' COMMENT 'CPM',
+    `create_time`  timestamp           NOT NULL                           DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`, `day`),
+    KEY `day` (`day`),
+    KEY `publisher_id` (`publisher_id`),
+    KEY `pub_app_id` (`pub_app_id`),
+    KEY `placement_id` (`placement_id`)
+) COMMENT ='stat cp, partition by day'
+    /*!50100 PARTITION BY RANGE (to_days(`day`))
+    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
+;
+
+CREATE TABLE IF NOT EXISTS `stat_dau_adn` (
+(
+    `id`           int(11) UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `day`          date                NOT NULL COMMENT 'timezone: UTC',
+    `publisher_id` int(10) UNSIGNED             DEFAULT '0' COMMENT 'publisher.id',
+    `pub_app_id`   int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+    `platform`     tinyint(2) UNSIGNED NOT NULL COMMENT '0:iOS,1:Android',
+    `country`      varchar(4)                   DEFAULT NULL COMMENT 'Country a2',
+    `adn_id`       int(10) UNSIGNED             DEFAULT '0' COMMENT 'Adnetwork id',
+    `ip_count`     int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+    `did_count`    int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+    `dau`          int(10) UNSIGNED    NOT NULL DEFAULT '0',
+    `deu`          int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+    `create_time`  timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`, `day`),
+    KEY `day` (`day`),
+    KEY `publisher_id` (`publisher_id`),
+    KEY `pub_app_id` (`pub_app_id`)
+) COMMENT ='DAU & DEU, partition by day'
+    /*!50100 PARTITION BY RANGE (to_days(`day`))
+    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
+;
 			    
-CREATE TABLE IF NOT EXISTS `stat_placement_dau` (
-     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-     `day` date NOT NULL COMMENT 'timezone: UTC',
-     `adn_id` int(10) unsigned DEFAULT '0' COMMENT 'Adnetwork id',
-     `publisher_id` int(10) unsigned DEFAULT '0' COMMENT 'publisher.id',
-     `pub_app_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
-     `placement_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'placement id',
-     `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
-     `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
-     `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
-     `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
-     `dau` int(10) unsigned NOT NULL DEFAULT '0',
-     `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
-     `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     PRIMARY KEY (`id`,`day`),
-     KEY `day` (`day`),
-     KEY `adn_id` (`adn_id`),
-     KEY `publisher_id` (`publisher_id`),
-     KEY `pub_app_id` (`pub_app_id`),
-     KEY `placement_id` (`placement_id`)
-     ) COMMENT='DAU & DEU, partition by day';
+CREATE TABLE IF NOT EXISTS `stat_dau_placement`
+(
+    `id`           int(11) UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `day`          date                NOT NULL COMMENT 'timezone: UTC',
+    `publisher_id` int(10) UNSIGNED             DEFAULT '0' COMMENT 'publisher.id',
+    `pub_app_id`   int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+    `platform`     tinyint(2) UNSIGNED NOT NULL COMMENT '0:iOS,1:Android',
+    `country`      varchar(4)                   DEFAULT NULL COMMENT 'Country a2',
+    `placement_id` int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'placement id',
+    `adn_id`       int(10) UNSIGNED             DEFAULT '0' COMMENT 'Adnetwork id',
+    `ip_count`     int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+    `did_count`    int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+    `dau`          int(10) UNSIGNED    NOT NULL DEFAULT '0',
+    `deu`          int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+    `create_time`  timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`, `day`),
+    KEY `day` (`day`),
+    KEY `publisher_id` (`publisher_id`),
+    KEY `pub_app_id` (`pub_app_id`)
+) COMMENT ='DAU & DEU, partition by day'
+    /*!50100 PARTITION BY RANGE (to_days(`day`))
+    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
+;
  
-CREATE TABLE IF NOT EXISTS `stat_instance_dau` (
-     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-     `day` date NOT NULL COMMENT 'timezone: UTC',
-     `adn_id` int(10) unsigned DEFAULT '0' COMMENT 'Adnetwork id',
-     `publisher_id` int(10) unsigned DEFAULT '0' COMMENT 'publisher.id',
-     `pub_app_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
-     `placement_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'placement id',
-     `instance_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'instance id',
-     `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
-     `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
-     `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
-     `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
-     `dau` int(10) unsigned NOT NULL DEFAULT '0',
-     `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
-     `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     PRIMARY KEY (`id`,`day`),
-     KEY `day` (`day`),
-     KEY `adn_id` (`adn_id`),
-     KEY `publisher_id` (`publisher_id`),
-     KEY `pub_app_id` (`pub_app_id`),
-     KEY `placement_id` (`placement_id`),
-     KEY `instance_id` (`instance_id`)
-     ) COMMENT='DAU & DEU, partition by day';			    
+CREATE TABLE IF NOT EXISTS `stat_dau_instance`
+(
+    `id`           int(11) UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `day`          date                NOT NULL COMMENT 'timezone: UTC',
+    `publisher_id` int(10) UNSIGNED             DEFAULT '0' COMMENT 'publisher.id',
+    `pub_app_id`   int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+    `platform`     tinyint(2) UNSIGNED NOT NULL COMMENT '0:iOS,1:Android',
+    `country`      varchar(4)                   DEFAULT NULL COMMENT 'Country a2',
+    `placement_id` int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'placement id',
+    `instance_id`  int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'instance id',
+    `adn_id`       int(10) UNSIGNED             DEFAULT '0' COMMENT 'Adnetwork id',
+    `ip_count`     int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+    `did_count`    int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+    `dau`          int(10) UNSIGNED    NOT NULL DEFAULT '0',
+    `deu`          int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+    `create_time`  timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`, `day`),
+    KEY `day` (`day`),
+    KEY `publisher_id` (`publisher_id`),
+    KEY `pub_app_id` (`pub_app_id`)
+) COMMENT ='DAU & DEU, partition by day'
+    /*!50100 PARTITION BY RANGE (to_days(`day`))
+    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
+;			    
 
 CREATE TABLE IF NOT EXISTS `om_upload` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
