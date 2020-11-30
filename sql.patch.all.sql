@@ -383,3 +383,98 @@ CREATE TABLE IF NOT EXISTS `stat_user_ltv` (
 
 INSERT INTO om_dict (pid, name, value, descn) VALUES (100, 'ltv_date_range', 30, '计算LTV的时间跨度, 单位天');
 UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart' WHERE (`id` = '1800');		    
+
+-- 2020-11-30
+CREATE TABLE IF NOT EXISTS `stat_adn_dau` (
+     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+     `day` date NOT NULL COMMENT 'timezone: UTC',
+     `adn_id` int(10) unsigned DEFAULT '0' COMMENT 'Adnetwork id',
+     `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
+     `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
+     `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+     `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+     `dau` int(10) unsigned NOT NULL DEFAULT '0',
+     `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+     `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     PRIMARY KEY (`id`,`day`),
+     KEY `day` (`day`),
+     KEY `adn_id` (`adn_id`)
+     ) COMMENT='DAU & DEU, partition by day';
+			    
+CREATE TABLE IF NOT EXISTS `stat_placement_dau` (
+     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+     `day` date NOT NULL COMMENT 'timezone: UTC',
+     `adn_id` int(10) unsigned DEFAULT '0' COMMENT 'Adnetwork id',
+     `publisher_id` int(10) unsigned DEFAULT '0' COMMENT 'publisher.id',
+     `pub_app_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+     `placement_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'placement id',
+     `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
+     `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
+     `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+     `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+     `dau` int(10) unsigned NOT NULL DEFAULT '0',
+     `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+     `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     PRIMARY KEY (`id`,`day`),
+     KEY `day` (`day`),
+     KEY `adn_id` (`adn_id`),
+     KEY `publisher_id` (`publisher_id`),
+     KEY `pub_app_id` (`pub_app_id`),
+     KEY `placement_id` (`placement_id`)
+     ) COMMENT='DAU & DEU, partition by day';
+ 
+CREATE TABLE `stat_instance_dau` (
+     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+     `day` date NOT NULL COMMENT 'timezone: UTC',
+     `adn_id` int(10) unsigned DEFAULT '0' COMMENT 'Adnetwork id',
+     `publisher_id` int(10) unsigned DEFAULT '0' COMMENT 'publisher.id',
+     `pub_app_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+     `placement_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'placement id',
+     `instance_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'instance id',
+     `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
+     `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
+     `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+     `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+     `dau` int(10) unsigned NOT NULL DEFAULT '0',
+     `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+     `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     PRIMARY KEY (`id`,`day`),
+     KEY `day` (`day`),
+     KEY `adn_id` (`adn_id`),
+     KEY `publisher_id` (`publisher_id`),
+     KEY `pub_app_id` (`pub_app_id`),
+     KEY `placement_id` (`placement_id`),
+     KEY `instance_id` (`instance_id`)
+     ) COMMENT='DAU & DEU, partition by day';			    
+
+CREATE TABLE om_upload (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `md5_file` char(32) NOT NULL DEFAULT '',
+  `path` varchar(100) NOT NULL DEFAULT '',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `md5_file` (`md5_file`)
+  ) ;			    
+			    
+  INSERT INTO um_permission (`id`, `pid`, `type`, `title`, `name`, `sort_index`, `sort_index_ext`, `status`) VALUES ('37', '11', 'perm', 'Cross Bid', 'cross_bid', '0', '0', '1');
+  INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3700,37,'action','Query','query','/cross/bid/get_select_apps\n/cross/bid/get_campaign\n/cross/bid/get_campaigns\n/cross/bid/get_creative\n/cross/bid/get_creatives\n/cross/bid/get_material\n/cross/bid/get_materials\n/cross/bid/get_templates',0,0,NULL,1,'2020-04-21 17:48:35','2020-10-21 16:51:26');
+  INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3701,37,'action','Add','add','/cross/bid/create_campaign\n/cross/bid/create_creative\n/cross/bid/create_material\n/cross/bid/create_creative_material\n/cross/bid/create_material_app_id\n/cross/bid/file_upload',0,0,NULL,1,'2020-04-23 15:59:19','2020-10-09 11:57:14');
+  INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3702,37,'action','Edit','edit','/cross/bid/update_campaign\n/cross/bid/update_campaign_status\n/cross/bid/update_creative\n/cross/bid/update_material\n/cross/bid/delete_creative_material\n/cross/bid/delete_material_app_id',0,0,NULL,1,'2020-04-23 15:59:19','2020-10-10 14:33:21');			    
+			    			    
+  INSERT INTO um_role_permission (`role_id`,`permission_id`,`create_time`) VALUES (1,37,'2020-10-09 11:58:33'),(2,37,'2020-10-09 12:01:05'),(20,37,'2020-10-09 12:03:05'),(30,37,'2020-10-09 12:03:34'),(40,37,'2020-10-09 12:04:18'),(50,37,'2020-10-09 12:04:18'),(1,3700,'2020-10-09 12:01:51'),(2,3700,'2020-10-09 12:01:05'),(2,3701,'2020-10-09 12:01:05'),(2,3702,'2020-10-09 12:01:05'),(20,3700,'2020-10-09 12:03:05'),(20,3701,'2020-10-09 12:03:05'),(20,3702,'2020-10-09 12:03:05'),(30,3700,'2020-10-09 12:03:34'),(30,3701,'2020-10-09 12:03:34'),(30,3702,'2020-10-09 12:03:34'),(40,3700,'2020-10-09 12:04:18'),(50,3700,'2020-10-09 12:04:18');			    
+
+CREATE TABLE open_mediation.`os_version` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `plat` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '0:iOS,1:Android',
+  `version` varchar(16) NOT NULL COMMENT '版本号',
+  `sub_version` varchar(16) NOT NULL DEFAULT '',
+  `title` varchar(40) DEFAULT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `version` (`plat`,`sub_version`)
+  ) COMMENT='设备版本';		    
+			    
+INSERT INTO `os_version` VALUES (101, 0, '10', '10.0', 'iOS 10.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (108, 0, '10', '10.1', 'iOS 10.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (109, 0, '10', '10.2', 'iOS 10.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (110, 0, '10', '10.3', 'iOS 10.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (120, 0, '11', '11.0', 'iOS 11.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (121, 0, '11', '11.1', 'iOS 11.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (122, 0, '11', '11.2', 'iOS 11.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (123, 0, '11', '11.3', 'iOS 11.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (124, 0, '11', '11.4', 'iOS 11.4', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (130, 0, '12', '12.0', 'iOS 12.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (131, 0, '12', '12.1', 'iOS 12.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (132, 0, '12', '12.2', 'iOS 12.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (133, 0, '12', '12.3', 'iOS 12.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (134, 0, '12', '12.4', 'iOS 12.4', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (135, 0, '13', '13.0', 'iOS / iPadOS 13.0', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (136, 0, '13', '13.1', 'iOS / iPadOS 13.1', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (137, 0, '13', '13.2', 'iOS / iPadOS 13.2', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (138, 0, '13', '13.3', 'iOS / iPadOS 13.3', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (139, 0, '13', '13.4', 'iOS / iPadOS 13.4', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (140, 0, '13', '13.5', 'iOS / iPadOS 13.5', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (141, 0, '13', '13.6', 'iOS / iPadOS 13.6', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (142, 0, '13', '13.7', 'iOS / iPadOS 13.7', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (143, 0, '14', '14.0', 'iOS / iPadOS 14.0', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (144, 0, '14', '14.1', 'iOS / iPadOS 14.1', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (201, 1, '4.4', '4.4', 'Android 4.4', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (202, 1, '5.0', '5.0', 'Android 5.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (203, 1, '5.1', '5.1', 'Android 5.1', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (204, 1, '6.0', '6.0', 'Android 6.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (205, 1, '7.0', '7.0', 'Android 7.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (206, 1, '8.0', '8.0', 'Android 8.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (207, 1, '8.1', '8.1', 'Android 8.1', '2020-10-15 10:43:58', '2020-10-19 15:42:02'), (208, 1, '9', '9', 'Android 9', '2020-10-15 11:04:04', '2020-10-16 11:24:24'), (209, 1, '10', '10', 'Android 10', '2020-10-15 11:04:04', '2020-10-16 11:24:24'), (210, 1, '11', '11', 'Android 11', '2020-10-15 11:04:04', '2020-10-16 11:24:24');		    
+			    
+		    
