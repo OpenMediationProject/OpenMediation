@@ -423,7 +423,7 @@ CREATE TABLE IF NOT EXISTS `stat_placement_dau` (
      KEY `placement_id` (`placement_id`)
      ) COMMENT='DAU & DEU, partition by day';
  
-CREATE TABLE `stat_instance_dau` (
+CREATE TABLE IF NOT EXISTS `stat_instance_dau` (
      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
      `day` date NOT NULL COMMENT 'timezone: UTC',
      `adn_id` int(10) unsigned DEFAULT '0' COMMENT 'Adnetwork id',
@@ -447,7 +447,7 @@ CREATE TABLE `stat_instance_dau` (
      KEY `instance_id` (`instance_id`)
      ) COMMENT='DAU & DEU, partition by day';			    
 
-CREATE TABLE om_upload (
+CREATE TABLE IF NOT EXISTS `om_upload` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `md5_file` char(32) NOT NULL DEFAULT '',
   `path` varchar(100) NOT NULL DEFAULT '',
@@ -463,7 +463,7 @@ CREATE TABLE om_upload (
 			    			    
   INSERT INTO um_role_permission (`role_id`,`permission_id`,`create_time`) VALUES (1,37,'2020-10-09 11:58:33'),(2,37,'2020-10-09 12:01:05'),(20,37,'2020-10-09 12:03:05'),(30,37,'2020-10-09 12:03:34'),(40,37,'2020-10-09 12:04:18'),(50,37,'2020-10-09 12:04:18'),(1,3700,'2020-10-09 12:01:51'),(2,3700,'2020-10-09 12:01:05'),(2,3701,'2020-10-09 12:01:05'),(2,3702,'2020-10-09 12:01:05'),(20,3700,'2020-10-09 12:03:05'),(20,3701,'2020-10-09 12:03:05'),(20,3702,'2020-10-09 12:03:05'),(30,3700,'2020-10-09 12:03:34'),(30,3701,'2020-10-09 12:03:34'),(30,3702,'2020-10-09 12:03:34'),(40,3700,'2020-10-09 12:04:18'),(50,3700,'2020-10-09 12:04:18');			    
 
-CREATE TABLE open_mediation.`os_version` (
+CREATE TABLE IF NOT EXISTS `os_version` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `plat` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '0:iOS,1:Android',
   `version` varchar(16) NOT NULL COMMENT '版本号',
