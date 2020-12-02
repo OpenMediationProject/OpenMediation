@@ -436,29 +436,27 @@ CREATE TABLE IF NOT EXISTS `stat_dau_adn` (
     (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
 ;
 			    
-CREATE TABLE IF NOT EXISTS `stat_dau_placement`
-(
-    `id`           int(11) UNSIGNED    NOT NULL AUTO_INCREMENT,
-    `day`          date                NOT NULL COMMENT 'timezone: UTC',
-    `publisher_id` int(10) UNSIGNED             DEFAULT '0' COMMENT 'publisher.id',
-    `pub_app_id`   int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
-    `platform`     tinyint(2) UNSIGNED NOT NULL COMMENT '0:iOS,1:Android',
-    `country`      varchar(4)                   DEFAULT NULL COMMENT 'Country a2',
-    `placement_id` int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'placement id',
-    `adn_id`       int(10) UNSIGNED             DEFAULT '0' COMMENT 'Adnetwork id',
-    `ip_count`     int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'ip的个数',
-    `did_count`    int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
-    `dau`          int(10) UNSIGNED    NOT NULL DEFAULT '0',
-    `deu`          int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
-    `create_time`  timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`, `day`),
-    KEY `day` (`day`),
-    KEY `publisher_id` (`publisher_id`),
-    KEY `pub_app_id` (`pub_app_id`)
-) COMMENT ='DAU & DEU, partition by day'
-    /*!50100 PARTITION BY RANGE (to_days(`day`))
-    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
-;
+CREATE TABLE IF NOT EXISTS `stat_dau_placement` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL COMMENT 'timezone: UTC',
+  `publisher_id` int(10) unsigned DEFAULT '0' COMMENT 'publisher.id',
+  `pub_app_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+  `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
+  `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
+  `placement_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'placement id',
+  `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+  `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+  `dau` int(10) unsigned NOT NULL DEFAULT '0',
+  `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`),
+  KEY `day` (`day`),
+  KEY `publisher_id` (`publisher_id`),
+  KEY `pub_app_id` (`pub_app_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='DAU & DEU, partition by day'
+/*!50100 PARTITION BY RANGE (to_days(`day`))
+(PARTITION p20201202 VALUES LESS THAN (738127) ENGINE = InnoDB,
+ PARTITION p20201203 VALUES LESS THAN (738128) ENGINE = InnoDB) */;
  
 CREATE TABLE IF NOT EXISTS `stat_dau_instance`
 (
@@ -482,9 +480,8 @@ CREATE TABLE IF NOT EXISTS `stat_dau_instance`
     KEY `pub_app_id` (`pub_app_id`)
 ) COMMENT ='DAU & DEU, partition by day'
     /*!50100 PARTITION BY RANGE (to_days(`day`))
-    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
-;			    
-
+    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */;		
+	
 CREATE TABLE IF NOT EXISTS `om_upload` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `md5_file` char(32) NOT NULL DEFAULT '',
@@ -492,8 +489,8 @@ CREATE TABLE IF NOT EXISTS `om_upload` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `md5_file` (`md5_file`)
-  ) ;			    
-			    
+  ) ;	
+	
   INSERT INTO um_permission (`id`, `pid`, `type`, `title`, `name`, `sort_index`, `sort_index_ext`, `status`) VALUES ('37', '11', 'perm', 'Cross Bid', 'cross_bid', '0', '0', '1');
   INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3700,37,'action','Query','query','/cross/bid/get_select_apps\n/cross/bid/get_campaign\n/cross/bid/get_campaigns\n/cross/bid/get_creative\n/cross/bid/get_creatives\n/cross/bid/get_material\n/cross/bid/get_materials\n/cross/bid/get_templates',0,0,NULL,1,'2020-04-21 17:48:35','2020-10-21 16:51:26');
   INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3701,37,'action','Add','add','/cross/bid/create_campaign\n/cross/bid/create_creative\n/cross/bid/create_material\n/cross/bid/create_creative_material\n/cross/bid/create_material_app_id\n/cross/bid/file_upload',0,0,NULL,1,'2020-04-23 15:59:19','2020-10-09 11:57:14');
@@ -517,3 +514,30 @@ INSERT INTO `os_version` VALUES (101, 0, '10', '10.0', 'iOS 10.0', '2020-10-15 1
 
 -- 2020-12-1
 UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart\n/report/list/cross_bid' WHERE (`id` = '1800');	    
+
+-- 2020-12-2
+CREATE TABLE IF NOT EXISTS `stat_dau_adn_placement` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL COMMENT 'timezone: UTC',
+  `publisher_id` int(10) unsigned DEFAULT '0' COMMENT 'publisher.id',
+  `pub_app_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+  `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
+  `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
+  `placement_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'placement id',
+  `adn_id` int(10) unsigned DEFAULT '0' COMMENT 'Adnetwork id',
+  `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+  `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+  `dau` int(10) unsigned NOT NULL DEFAULT '0',
+  `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`),
+  KEY `day` (`day`),
+  KEY `publisher_id` (`publisher_id`),
+  KEY `pub_app_id` (`pub_app_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='DAU & DEU, partition by day'
+/*!50100 PARTITION BY RANGE (to_days(`day`))
+(PARTITION p20201130 VALUES LESS THAN (738125) ENGINE = InnoDB,
+ PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB,
+ PARTITION p20201202 VALUES LESS THAN (738127) ENGINE = InnoDB,
+ PARTITION p20201203 VALUES LESS THAN (738128) ENGINE = InnoDB) */;
+			    
