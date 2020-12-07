@@ -108,12 +108,12 @@ ALTER TABLE stat_lr ADD COLUMN scene_id INT(11) NOT NULL DEFAULT 0 AFTER `instan
 
 -- 20200610
 ALTER TABLE `report_adnetwork_linked`
-ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 BINARY NOT NULL DEFAULT 'USD' AFTER `abt`,
+ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4_bin NOT NULL DEFAULT 'USD' AFTER `abt`,
 ADD COLUMN `exchange_rate` decimal(16,6) NOT NULL DEFAULT '0.000000' AFTER `currency`,
 ADD COLUMN `cost_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' AFTER `cost`,
 ADD COLUMN `revenue_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'Revenue' AFTER `revenue`;
 ALTER TABLE `stat_adnetwork`
-ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 BINARY NOT NULL DEFAULT 'USD' AFTER `abt`,
+ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4_bin NOT NULL DEFAULT 'USD' AFTER `abt`,
 ADD COLUMN `exchange_rate` decimal(16,6) NOT NULL DEFAULT '0.000000' AFTER `currency`,
 ADD COLUMN `cost_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' AFTER `cost`,
 ADD COLUMN `revenue_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'Revenue' AFTER `revenue`;
@@ -150,8 +150,8 @@ INSERT INTO `om_currency_exchange` (`id`, `cur_from`, `cur_to`, `exchange_rate`,
 -- 20200720
 alter table stat_lr
     add `bid` tinyint(3) NOT NULL DEFAULT '0' COMMENT 'isBidReleated, {0:NO,1:YES}';
-    
--- 20200812 
+
+-- 20200812
 UPDATE um_permission SET `api_path` = '/placement/get\n/placement/update\n/placement/scene/update\n/placement/create_update' WHERE (`id` = '1302');
 UPDATE um_permission SET `api_path` = '/mediation/segment/save\n/mediation/segment/rule/delete\n/mediation/segment/resort/priority\n/mediation/rule/resort/priority\n/mediation/segment/update\n/mediation/segment/rule/update\n/mediation/segment/rule/instance/update\n/mediation/segment/rule/instance/create\n/mediation/segment/rule/instance/delete\n/mediation/segment/get\n/mediation/segment/rule/instance/delete\n/mediation/rule/resort/priority\n/mediation/segment/rule/delete\n/placement/get' WHERE (`id` = '1600');
 
@@ -263,7 +263,7 @@ PARTITION BY RANGE (to_days(`day`))
  PARTITION p202010 VALUES LESS THAN (738095) ENGINE = InnoDB,
  PARTITION p202011 VALUES LESS THAN (738125) ENGINE = InnoDB,
  PARTITION p202012 VALUES LESS THAN (738156) ENGINE = InnoDB);
-			    
+
 alter table `report_adnetwork_error` add column `solution_url` varchar(1000) DEFAULT NULL COMMENT 'solution_url' after `solution_cn`;
 truncate table report_adnetwork_error;
 INSERT INTO `report_adnetwork_error` (`id`, `adn_id`, `error_code`, `reason`, `content`, `solution`, `solution_cn`, `solution_url`, `is_ignore`, `status`, `create_time`, `lastmodify`)
@@ -323,7 +323,7 @@ VALUES
 UPDATE `om_adnetwork` SET status=1 WHERE id=17;
 
 -- 2020-09-30
-UPDATE `om_adnetwork` SET `bid_endpoint` = 'https://rtb.api.vungle.com/bid/t/428d94f' WHERE `id` = '5';	
+UPDATE `om_adnetwork` SET `bid_endpoint` = 'https://rtb.api.vungle.com/bid/t/428d94f' WHERE `id` = '5';
 
 -- 2020-10-27
 CREATE TABLE `report_tencent` (
@@ -353,7 +353,7 @@ CREATE TABLE `report_tencent` (
   KEY `day` (`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 2020-11-06			    
+-- 2020-11-06
 CREATE TABLE IF NOT EXISTS `stat_user_ltv` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `day` date NOT NULL DEFAULT '0000-00-00' COMMENT 'timezone: UTC',
@@ -378,13 +378,13 @@ CREATE TABLE IF NOT EXISTS `stat_user_ltv` (
   KEY `publisher_id` (`publisher_id`),
   KEY `pub_app_id` (`pub_app_id`)
 ) COMMENT='user ltv, partition by day'
-/*!50100 PARTITION BY RANGE (to_days(`day`))
-(PARTITION p20201107 VALUES LESS THAN (738102) ENGINE = InnoDB) */
-			    
-INSERT INTO om_dict (pid, name, value, descn) VALUES (100,'uar_switch', 0, '计算UAR的开关,0:关闭,1:开启');			    
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p20201107 VALUES LESS THAN (738102) ENGINE = InnoDB);
+
+INSERT INTO om_dict (pid, name, value, descn) VALUES (100,'uar_switch', 0, '计算UAR的开关,0:关闭,1:开启');
 INSERT INTO om_dict (pid, name, value, descn) VALUES (100,'ltv_switch', 0, '计算LTV的开关,0:关闭,1:开启');
 INSERT INTO om_dict (pid, name, value, descn) VALUES (100, 'ltv_date_range', 30, '计算LTV的时间跨度, 单位天');
-UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart' WHERE (`id` = '1800');		    
+UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart' WHERE (`id` = '1800');
 
 -- 2020-11-30
 CREATE TABLE IF NOT EXISTS `stat_cp`
@@ -409,12 +409,11 @@ CREATE TABLE IF NOT EXISTS `stat_cp`
     KEY `pub_app_id` (`pub_app_id`),
     KEY `placement_id` (`placement_id`)
 ) COMMENT ='stat cp, partition by day'
-    /*!50100 PARTITION BY RANGE (to_days(`day`))
-    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
-;
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB);
+
 
 CREATE TABLE IF NOT EXISTS `stat_dau_adn` (
-(
     `id`           int(11) UNSIGNED    NOT NULL AUTO_INCREMENT,
     `day`          date                NOT NULL COMMENT 'timezone: UTC',
     `publisher_id` int(10) UNSIGNED             DEFAULT '0' COMMENT 'publisher.id',
@@ -432,10 +431,9 @@ CREATE TABLE IF NOT EXISTS `stat_dau_adn` (
     KEY `publisher_id` (`publisher_id`),
     KEY `pub_app_id` (`pub_app_id`)
 ) COMMENT ='DAU & DEU, partition by day'
-    /*!50100 PARTITION BY RANGE (to_days(`day`))
-    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */
-;
-			    
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB);
+
 CREATE TABLE IF NOT EXISTS `stat_dau_placement` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `day` date NOT NULL COMMENT 'timezone: UTC',
@@ -454,10 +452,10 @@ CREATE TABLE IF NOT EXISTS `stat_dau_placement` (
   KEY `publisher_id` (`publisher_id`),
   KEY `pub_app_id` (`pub_app_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='DAU & DEU, partition by day'
-/*!50100 PARTITION BY RANGE (to_days(`day`))
+PARTITION BY RANGE (to_days(`day`))
 (PARTITION p20201202 VALUES LESS THAN (738127) ENGINE = InnoDB,
- PARTITION p20201203 VALUES LESS THAN (738128) ENGINE = InnoDB) */;
- 
+ PARTITION p20201203 VALUES LESS THAN (738128) ENGINE = InnoDB);
+
 CREATE TABLE IF NOT EXISTS `stat_dau_instance`
 (
     `id`           int(11) UNSIGNED    NOT NULL AUTO_INCREMENT,
@@ -479,9 +477,9 @@ CREATE TABLE IF NOT EXISTS `stat_dau_instance`
     KEY `publisher_id` (`publisher_id`),
     KEY `pub_app_id` (`pub_app_id`)
 ) COMMENT ='DAU & DEU, partition by day'
-    /*!50100 PARTITION BY RANGE (to_days(`day`))
-    (PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB) */;		
-	
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p20201201 VALUES LESS THAN (738126) ENGINE = InnoDB);
+
 CREATE TABLE IF NOT EXISTS `om_upload` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `md5_file` char(32) NOT NULL DEFAULT '',
@@ -489,14 +487,14 @@ CREATE TABLE IF NOT EXISTS `om_upload` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `md5_file` (`md5_file`)
-  ) ;	
-	
-  INSERT INTO um_permission (`id`, `pid`, `type`, `title`, `name`, `sort_index`, `sort_index_ext`, `status`) VALUES ('37', '11', 'perm', 'Cross Bid', 'cross_bid', '0', '0', '1');
-  INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3700,37,'action','Query','query','/cross/bid/get_select_apps\n/cross/bid/get_campaign\n/cross/bid/get_campaigns\n/cross/bid/get_creative\n/cross/bid/get_creatives\n/cross/bid/get_material\n/cross/bid/get_materials\n/cross/bid/get_templates',0,0,NULL,1,'2020-04-21 17:48:35','2020-10-21 16:51:26');
-  INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3701,37,'action','Add','add','/cross/bid/create_campaign\n/cross/bid/create_creative\n/cross/bid/create_material\n/cross/bid/create_creative_material\n/cross/bid/create_material_app_id\n/cross/bid/file_upload',0,0,NULL,1,'2020-04-23 15:59:19','2020-10-09 11:57:14');
-  INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3702,37,'action','Edit','edit','/cross/bid/update_campaign\n/cross/bid/update_campaign_status\n/cross/bid/update_creative\n/cross/bid/update_material\n/cross/bid/delete_creative_material\n/cross/bid/delete_material_app_id',0,0,NULL,1,'2020-04-23 15:59:19','2020-10-10 14:33:21');			    
-			    			    
-  INSERT INTO um_role_permission (`role_id`,`permission_id`,`create_time`) VALUES (1,37,'2020-10-09 11:58:33'),(2,37,'2020-10-09 12:01:05'),(20,37,'2020-10-09 12:03:05'),(30,37,'2020-10-09 12:03:34'),(40,37,'2020-10-09 12:04:18'),(50,37,'2020-10-09 12:04:18'),(1,3700,'2020-10-09 12:01:51'),(2,3700,'2020-10-09 12:01:05'),(2,3701,'2020-10-09 12:01:05'),(2,3702,'2020-10-09 12:01:05'),(20,3700,'2020-10-09 12:03:05'),(20,3701,'2020-10-09 12:03:05'),(20,3702,'2020-10-09 12:03:05'),(30,3700,'2020-10-09 12:03:34'),(30,3701,'2020-10-09 12:03:34'),(30,3702,'2020-10-09 12:03:34'),(40,3700,'2020-10-09 12:04:18'),(50,3700,'2020-10-09 12:04:18');			    
+);
+
+INSERT INTO um_permission (`id`, `pid`, `type`, `title`, `name`, `sort_index`, `sort_index_ext`, `status`) VALUES ('37', '11', 'perm', 'Cross Bid', 'cross_bid', '0', '0', '1');
+INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3700,37,'action','Query','query','/cross/bid/get_select_apps\n/cross/bid/get_campaign\n/cross/bid/get_campaigns\n/cross/bid/get_creative\n/cross/bid/get_creatives\n/cross/bid/get_material\n/cross/bid/get_materials\n/cross/bid/get_templates',0,0,NULL,1,'2020-04-21 17:48:35','2020-10-21 16:51:26');
+INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3701,37,'action','Add','add','/cross/bid/create_campaign\n/cross/bid/create_creative\n/cross/bid/create_material\n/cross/bid/create_creative_material\n/cross/bid/create_material_app_id\n/cross/bid/file_upload',0,0,NULL,1,'2020-04-23 15:59:19','2020-10-09 11:57:14');
+INSERT INTO um_permission (`id`,`pid`,`type`,`title`,`name`,`api_path`,`sort_index`,`sort_index_ext`,`descn`,`status`,`create_time`,`lastmodify`) VALUES (3702,37,'action','Edit','edit','/cross/bid/update_campaign\n/cross/bid/update_campaign_status\n/cross/bid/update_creative\n/cross/bid/update_material\n/cross/bid/delete_creative_material\n/cross/bid/delete_material_app_id',0,0,NULL,1,'2020-04-23 15:59:19','2020-10-10 14:33:21');
+
+INSERT INTO um_role_permission (`role_id`,`permission_id`,`create_time`) VALUES (1,37,'2020-10-09 11:58:33'),(2,37,'2020-10-09 12:01:05'),(20,37,'2020-10-09 12:03:05'),(30,37,'2020-10-09 12:03:34'),(40,37,'2020-10-09 12:04:18'),(50,37,'2020-10-09 12:04:18'),(1,3700,'2020-10-09 12:01:51'),(2,3700,'2020-10-09 12:01:05'),(2,3701,'2020-10-09 12:01:05'),(2,3702,'2020-10-09 12:01:05'),(20,3700,'2020-10-09 12:03:05'),(20,3701,'2020-10-09 12:03:05'),(20,3702,'2020-10-09 12:03:05'),(30,3700,'2020-10-09 12:03:34'),(30,3701,'2020-10-09 12:03:34'),(30,3702,'2020-10-09 12:03:34'),(40,3700,'2020-10-09 12:04:18'),(50,3700,'2020-10-09 12:04:18');
 
 CREATE TABLE IF NOT EXISTS `os_version` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -508,12 +506,12 @@ CREATE TABLE IF NOT EXISTS `os_version` (
   `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `version` (`plat`,`sub_version`)
-  ) COMMENT='设备版本';		    
-			    
-INSERT INTO `os_version` VALUES (101, 0, '10', '10.0', 'iOS 10.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (108, 0, '10', '10.1', 'iOS 10.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (109, 0, '10', '10.2', 'iOS 10.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (110, 0, '10', '10.3', 'iOS 10.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (120, 0, '11', '11.0', 'iOS 11.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (121, 0, '11', '11.1', 'iOS 11.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (122, 0, '11', '11.2', 'iOS 11.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (123, 0, '11', '11.3', 'iOS 11.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (124, 0, '11', '11.4', 'iOS 11.4', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (130, 0, '12', '12.0', 'iOS 12.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (131, 0, '12', '12.1', 'iOS 12.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (132, 0, '12', '12.2', 'iOS 12.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (133, 0, '12', '12.3', 'iOS 12.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (134, 0, '12', '12.4', 'iOS 12.4', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (135, 0, '13', '13.0', 'iOS / iPadOS 13.0', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (136, 0, '13', '13.1', 'iOS / iPadOS 13.1', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (137, 0, '13', '13.2', 'iOS / iPadOS 13.2', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (138, 0, '13', '13.3', 'iOS / iPadOS 13.3', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (139, 0, '13', '13.4', 'iOS / iPadOS 13.4', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (140, 0, '13', '13.5', 'iOS / iPadOS 13.5', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (141, 0, '13', '13.6', 'iOS / iPadOS 13.6', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (142, 0, '13', '13.7', 'iOS / iPadOS 13.7', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (143, 0, '14', '14.0', 'iOS / iPadOS 14.0', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (144, 0, '14', '14.1', 'iOS / iPadOS 14.1', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (201, 1, '4.4', '4.4', 'Android 4.4', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (202, 1, '5.0', '5.0', 'Android 5.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (203, 1, '5.1', '5.1', 'Android 5.1', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (204, 1, '6.0', '6.0', 'Android 6.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (205, 1, '7.0', '7.0', 'Android 7.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (206, 1, '8.0', '8.0', 'Android 8.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (207, 1, '8.1', '8.1', 'Android 8.1', '2020-10-15 10:43:58', '2020-10-19 15:42:02'), (208, 1, '9', '9', 'Android 9', '2020-10-15 11:04:04', '2020-10-16 11:24:24'), (209, 1, '10', '10', 'Android 10', '2020-10-15 11:04:04', '2020-10-16 11:24:24'), (210, 1, '11', '11', 'Android 11', '2020-10-15 11:04:04', '2020-10-16 11:24:24');		    
+) COMMENT='设备版本';
+
+INSERT INTO `os_version` VALUES (101, 0, '10', '10.0', 'iOS 10.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (108, 0, '10', '10.1', 'iOS 10.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (109, 0, '10', '10.2', 'iOS 10.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (110, 0, '10', '10.3', 'iOS 10.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (120, 0, '11', '11.0', 'iOS 11.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (121, 0, '11', '11.1', 'iOS 11.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (122, 0, '11', '11.2', 'iOS 11.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (123, 0, '11', '11.3', 'iOS 11.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (124, 0, '11', '11.4', 'iOS 11.4', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (130, 0, '12', '12.0', 'iOS 12.0', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (131, 0, '12', '12.1', 'iOS 12.1', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (132, 0, '12', '12.2', 'iOS 12.2', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (133, 0, '12', '12.3', 'iOS 12.3', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (134, 0, '12', '12.4', 'iOS 12.4', '2020-10-15 10:43:58', '2020-10-16 11:22:29'), (135, 0, '13', '13.0', 'iOS / iPadOS 13.0', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (136, 0, '13', '13.1', 'iOS / iPadOS 13.1', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (137, 0, '13', '13.2', 'iOS / iPadOS 13.2', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (138, 0, '13', '13.3', 'iOS / iPadOS 13.3', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (139, 0, '13', '13.4', 'iOS / iPadOS 13.4', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (140, 0, '13', '13.5', 'iOS / iPadOS 13.5', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (141, 0, '13', '13.6', 'iOS / iPadOS 13.6', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (142, 0, '13', '13.7', 'iOS / iPadOS 13.7', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (143, 0, '14', '14.0', 'iOS / iPadOS 14.0', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (144, 0, '14', '14.1', 'iOS / iPadOS 14.1', '2020-10-15 10:43:58', '2020-10-16 11:23:47'), (201, 1, '4.4', '4.4', 'Android 4.4', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (202, 1, '5.0', '5.0', 'Android 5.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (203, 1, '5.1', '5.1', 'Android 5.1', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (204, 1, '6.0', '6.0', 'Android 6.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (205, 1, '7.0', '7.0', 'Android 7.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (206, 1, '8.0', '8.0', 'Android 8.0', '2020-10-15 10:43:58', '2020-10-16 11:24:24'), (207, 1, '8.1', '8.1', 'Android 8.1', '2020-10-15 10:43:58', '2020-10-19 15:42:02'), (208, 1, '9', '9', 'Android 9', '2020-10-15 11:04:04', '2020-10-16 11:24:24'), (209, 1, '10', '10', 'Android 10', '2020-10-15 11:04:04', '2020-10-16 11:24:24'), (210, 1, '11', '11', 'Android 11', '2020-10-15 11:04:04', '2020-10-16 11:24:24');
 
 -- 2020-12-1
-UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart\n/report/list/cross_bid' WHERE (`id` = '1800');	    
+UPDATE um_permission SET `api_path` = '/report/list\n/report/dau/list\n/report/lr/list\n/report/adnetwork/list\n/report/ltv\n/report/ltv/chart\n/report/retention\n/report/retention/chart\n/report/list/cross_bid' WHERE (`id` = '1800');
 
 -- 2020-12-2
 CREATE TABLE IF NOT EXISTS `stat_dau_adn_placement` (
@@ -535,7 +533,22 @@ CREATE TABLE IF NOT EXISTS `stat_dau_adn_placement` (
   KEY `publisher_id` (`publisher_id`),
   KEY `pub_app_id` (`pub_app_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='DAU & DEU, partition by day'
-/*!50100 PARTITION BY RANGE (to_days(`day`))
+PARTITION BY RANGE (to_days(`day`))
 (PARTITION p20201202 VALUES LESS THAN (738127) ENGINE = InnoDB,
- PARTITION p20201203 VALUES LESS THAN (738128) ENGINE = InnoDB) */;
-			    
+ PARTITION p20201203 VALUES LESS THAN (738128) ENGINE = InnoDB);
+
+-- ---------------- --
+-- 2020-11-20, v2.0 --
+INSERT INTO om_dict (pid, name, value, descn) VALUES
+(100, 'dau_dimensions', '{\n    \"app\":1,\n    \"instance\":0,\n    \"placement\":0,\n    \"adn_placement\":0,\n    \"adn\":0\n}', '多维度DAU控制, key: 维度, value: [0, 1]');
+
+alter table om_adnetwork add `region_plat_type` tinyint(3) NOT NULL DEFAULT '3' COMMENT '支持的地区平台，二进制: [国内Android,国外Android,iOS]' after `class_name`;
+update om_adnetwork set region_plat_type=7 where id=4;
+update om_adnetwork set region_plat_type=5 where id=6;
+update om_adnetwork set region_plat_type=7 where id=13;
+update om_adnetwork set region_plat_type=7 where id=14;
+alter table om_placement_rule_segment
+    add `osv_exp` varchar(100) DEFAULT NULL COMMENT '定向osv表达式, 分号或换行分隔多个, 每个item可以是单个版本, 也可以是版本区间, 使用数学区间表达式, 支持开闭区间' after con_type,
+    add `sdkv_exp` varchar(100) DEFAULT NULL COMMENT '定向sdkv表达式, 分号或换行分隔多个, 每个item可以是单个版本, 也可以是版本区间, 使用数学区间表达式, 支持开闭区间' after osv_exp,
+    add `appv_exp` varchar(100) DEFAULT NULL COMMENT '定向appv表达式, 分号或换行分隔多个, 每个item可以是单个版本, 也可以是版本区间, 使用数学区间表达式, 支持开闭区间' after sdkv_exp,
+    add `require_did` tinyint(3) unsigned not null DEFAULT 0 COMMENT '需要非空deviceId, 0:No,1:Yes' after appv_exp;
