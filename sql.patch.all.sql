@@ -108,12 +108,12 @@ ALTER TABLE stat_lr ADD COLUMN scene_id INT(11) NOT NULL DEFAULT 0 AFTER `instan
 
 -- 20200610
 ALTER TABLE `report_adnetwork_linked`
-ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'USD' AFTER `abt`,
+ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT 'USD' AFTER `abt`,
 ADD COLUMN `exchange_rate` decimal(16,6) NOT NULL DEFAULT '0.000000' AFTER `currency`,
 ADD COLUMN `cost_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' AFTER `cost`,
 ADD COLUMN `revenue_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'Revenue' AFTER `revenue`;
 ALTER TABLE `stat_adnetwork`
-ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'USD' AFTER `abt`,
+ADD COLUMN `currency` VARCHAR(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT 'USD' AFTER `abt`,
 ADD COLUMN `exchange_rate` decimal(16,6) NOT NULL DEFAULT '0.000000' AFTER `currency`,
 ADD COLUMN `cost_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' AFTER `cost`,
 ADD COLUMN `revenue_ori` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'Revenue' AFTER `revenue`;
@@ -539,16 +539,71 @@ PARTITION BY RANGE (to_days(`day`))
 
 -- ---------------- --
 -- 2020-11-20, v2.0 --
-INSERT INTO om_dict (pid, name, value, descn) VALUES
-(100, 'dau_dimensions', '{\n    \"app\":1,\n    \"instance\":0,\n    \"placement\":0,\n    \"adn_placement\":0,\n    \"adn\":0\n}', '多维度DAU控制, key: 维度, value: [0, 1]');
+INSERT INTO `om_dict` (`pid`, `name`, `value`, `descn`) VALUES
+(100, 'dau_dimensions', '{\n    \"app\":1,\n    \"instance\":0,\n    \"placement\":0,\n    \"adn_placement\":0,\n    \"adn\":0\n}', '多维度DAU控制, key: 维度, value: [0, 1]'),
+(100, 'cp', NULL, 'CrossPromotion Root Key');
+
+select id from om_dict where name='cp' into @dict_cp_id;
+INSERT INTO `om_dict` (`pid`, `name`, `value`, `descn`) VALUES
+(@dict_cp_id, 'cdn_domain', 'cdn.xxx.com', 'CrossPromotion CDN domain'),
+(@dict_cp_id, 'test_cids', '2,3,4,5', 'CrossPromotion test campaign id list'),
+(@dict_cp_id, 'skAdNetworkVersion', '2.0', 'iOS14 SkAdNetworkVersion'),
+(@dict_cp_id, 'skAdNetworkId', NULL, 'iOS14 SkAdNetworkId'),
+(@dict_cp_id, 'skPrivateKey', NULL, 'iOS14 SkPrivateKey');
 
 alter table om_adnetwork add `region_plat_type` tinyint(3) NOT NULL DEFAULT '3' COMMENT '支持的地区平台，二进制: [国内Android,国外Android,iOS]' after `class_name`;
 update om_adnetwork set region_plat_type=7 where id=4;
 update om_adnetwork set region_plat_type=5 where id=6;
 update om_adnetwork set region_plat_type=7 where id=13;
 update om_adnetwork set region_plat_type=7 where id=14;
+INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `region_plat_type`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`, `bid_endpoint`)
+VALUES
+(19, 'crossPromotion', 'CrossPromotion', 3, 15, 15, 15, NULL, 'CrossPromotion', 1, 1, 'http://127.0.0.1:19011/cp/bid/v1');
+
 alter table om_placement_rule_segment
     add `osv_exp` varchar(100) DEFAULT NULL COMMENT '定向osv表达式, 分号或换行分隔多个, 每个item可以是单个版本, 也可以是版本区间, 使用数学区间表达式, 支持开闭区间' after con_type,
     add `sdkv_exp` varchar(100) DEFAULT NULL COMMENT '定向sdkv表达式, 分号或换行分隔多个, 每个item可以是单个版本, 也可以是版本区间, 使用数学区间表达式, 支持开闭区间' after osv_exp,
     add `appv_exp` varchar(100) DEFAULT NULL COMMENT '定向appv表达式, 分号或换行分隔多个, 每个item可以是单个版本, 也可以是版本区间, 使用数学区间表达式, 支持开闭区间' after sdkv_exp,
     add `require_did` tinyint(3) unsigned not null DEFAULT 0 COMMENT '需要非空deviceId, 0:No,1:Yes' after appv_exp;
+
+CREATE TABLE `om_app` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `plat` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '0:ios,1:android',
+    `app_id` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'ios:app_id,android:package_name',
+    `other_store_id` varchar(150) DEFAULT NULL COMMENT '其它市场的app_id',
+    `name` varchar(300) DEFAULT NULL,
+    `icon` varchar(500) DEFAULT NULL,
+    `screenshot_urls` text COMMENT 'screenshot_urls',
+    `video_url` varchar(500) DEFAULT NULL COMMENT 'VideoURL',
+    `bundle_id` varchar(500) DEFAULT NULL COMMENT 'ios bundle_id',
+    `category` varchar(50) DEFAULT NULL COMMENT '分类',
+    `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类ID,ISO与Android不同',
+    `sub_category_id1` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '子分类ID1,om_app_category.id',
+    `sub_category_id2` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '子分类ID2,om_app_category.id',
+    `sub_category_id3` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '子分类ID3,om_app_category.id',
+    `preview_url` varchar(500) DEFAULT NULL COMMENT '商店或预览地址',
+    `rating_value` decimal(5,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '评分',
+    `rating_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评分人数',
+    `release_time` timestamp NULL DEFAULT NULL COMMENT '最后发布时间, currentVersionReleaseDate',
+    `version` varchar(50) NOT NULL DEFAULT '' COMMENT '最新版本',
+    `os_require` varchar(20) NOT NULL DEFAULT '' COMMENT '系统最低要求',
+    `main_lang` varchar(10) DEFAULT NULL COMMENT '主语言,iso code',
+    `descn` text,
+    `more_descn` text COMMENT '大描述',
+    `whatsnew` text,
+    `country` varchar(2) DEFAULT '',
+    `fetched` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0:未抓取,1:成功,2:失败',
+    `fetch_time` timestamp NOT NULL DEFAULT '2000-01-01 00:00:00',
+    `failed_times` int(10) unsigned DEFAULT '0' COMMENT '抓取失败次数',
+    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `app_id` (`app_id`(50)),
+    KEY `idx_fetched` (`fetched`),
+    KEY `idx_fetch_time` (`fetch_time`),
+    KEY `idx_bundle_id` (`bundle_id`(50)),
+    KEY `idx_name` (`name`(50)),
+    KEY `idx_category_id` (`category_id`),
+    KEY `idx_sub_category_id1` (`sub_category_id1`),
+    KEY `idx_sub_category_id2` (`sub_category_id2`)
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COMMENT='App Information';
