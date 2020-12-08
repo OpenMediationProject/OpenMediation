@@ -532,7 +532,7 @@ CREATE TABLE IF NOT EXISTS `stat_dau_adn_placement` (
   KEY `day` (`day`),
   KEY `publisher_id` (`publisher_id`),
   KEY `pub_app_id` (`pub_app_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='DAU & DEU, partition by day'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='DAU & DEU, partition by day'
 PARTITION BY RANGE (to_days(`day`))
 (PARTITION p20201202 VALUES LESS THAN (738127) ENGINE = InnoDB,
  PARTITION p20201203 VALUES LESS THAN (738128) ENGINE = InnoDB);
@@ -566,7 +566,7 @@ alter table om_placement_rule_segment
     add `appv_exp` varchar(100) DEFAULT NULL COMMENT '定向appv表达式, 分号或换行分隔多个, 每个item可以是单个版本, 也可以是版本区间, 使用数学区间表达式, 支持开闭区间' after sdkv_exp,
     add `require_did` tinyint(3) unsigned not null DEFAULT 0 COMMENT '需要非空deviceId, 0:No,1:Yes' after appv_exp;
 
-CREATE TABLE `om_app` (
+CREATE TABLE IF NOT EXISTS `om_app` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `plat` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '0:ios,1:android',
     `app_id` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'ios:app_id,android:package_name',
@@ -606,4 +606,4 @@ CREATE TABLE `om_app` (
     KEY `idx_category_id` (`category_id`),
     KEY `idx_sub_category_id1` (`sub_category_id1`),
     KEY `idx_sub_category_id2` (`sub_category_id2`)
-) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COMMENT='App Information';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='App Information';
