@@ -607,3 +607,230 @@ CREATE TABLE IF NOT EXISTS `om_app` (
     KEY `idx_sub_category_id1` (`sub_category_id1`),
     KEY `idx_sub_category_id2` (`sub_category_id2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='App Information';
+
+-- 2020-12-12 v2.0.1
+CREATE TABLE `cp_campaign`
+(
+    `id`              int(10) unsigned        NOT NULL AUTO_INCREMENT,
+    `ska_campaign_id` tinyint(3)                       DEFAULT '0' COMMENT 'iOS14专用SkAdNetwork Campaign ID',
+    `publisher_id`    int(10) unsigned        NOT NULL COMMENT '开发者ID',
+    `type`            tinyint(3)              NOT NULL DEFAULT '0' COMMENT '活动投放类型, 0:House Ads,1:Direct Sold',
+    `name`            varchar(500)                     DEFAULT NULL COMMENT '活动名称',
+    `app_id`          varchar(200)            NOT NULL COMMENT 'APP_ID',
+    `app_name`        varchar(300)                     DEFAULT NULL COMMENT 'app_name',
+    `preview_url`     varchar(1000)                    DEFAULT NULL COMMENT 'previewUrl, 上架App填 storeUrl',
+    `platform`        tinyint(2) unsigned     NOT NULL DEFAULT '0' COMMENT '0:iOS,1:Android',
+    `billing_type`    tinyint(3) unsigned     NOT NULL DEFAULT '0' COMMENT '计费方式,0:CPI,1:CPA,2:CPC,3:CPM',
+    `price`           decimal(8, 2) unsigned  NOT NULL COMMENT '转化单价',
+    `daily_cap`       int(10)                 NOT NULL DEFAULT '5000' COMMENT '每日上限',
+    `daily_budget`    decimal(16, 2) unsigned NOT NULL DEFAULT '9999.00' COMMENT '每日预算',
+    `max_bidprice`    decimal(8, 2) unsigned  NOT NULL DEFAULT '1.00' COMMENT '最高出价',
+    `bidprice`        decimal(8, 2) unsigned  NOT NULL DEFAULT '0.01' COMMENT '全局预设出价, eCPM',
+    `impr_cap`        int(10) unsigned                 DEFAULT '0' COMMENT 'SDK展现每日上限, 0:不限制',
+    `impr_freq`       int(10) unsigned                 DEFAULT '0' COMMENT 'SDK展现频次(单did24小时展现次数)',
+    `ad_domain`       varchar(50)                      DEFAULT NULL COMMENT '广告主域名',
+    `click_url`       varchar(1000)           NOT NULL DEFAULT '' COMMENT 'URI to open as destination page when user clicks on the ad 原 landing_page',
+    `impr_url`        varchar(1000)                    DEFAULT NULL,
+    `click_tk_urls`   varchar(2000)                    DEFAULT NULL COMMENT 'URIs to request for tracking purposes when user clicks on the ad, ClickTracking, 行分割多条',
+    `impr_tk_urls`    varchar(2000)                    DEFAULT NULL COMMENT 'URIs to track impression, 行分割多条',
+    `start_time`      timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始投放时间',
+    `end_time`        timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束投放时间',
+    `status`          tinyint(2) unsigned     NOT NULL DEFAULT '0' COMMENT '状态：{0:Pending，1:Active，2:Paused, 3:Deleted}',
+    `run_status`      tinyint(2) unsigned              DEFAULT '0' COMMENT '投放状态,0:stop,1:run',
+    `last_reason`     varchar(100)                     DEFAULT NULL COMMENT '投放状态变化原因',
+    `remark`          text COMMENT '备注',
+    `lastmodify`      timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `create_time`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `publisher_id` (`publisher_id`),
+    KEY `name` (`name`(50)),
+    KEY `status` (`status`),
+    KEY `run_status` (`run_status`),
+    KEY `price` (`price`),
+    KEY `create_time` (`create_time`),
+    KEY `lastmodify` (`lastmodify`),
+    KEY `app_id` (`app_id`(50)),
+    KEY `billing_type` (`billing_type`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动';
+
+
+CREATE TABLE `cp_campaign_bidprice`
+(
+    `id`          int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `campaign_id` int(10) unsigned NOT NULL COMMENT '活动ID',
+    `country`     char(3)          NOT NULL,
+    `bidprice`    decimal(8, 2)    NOT NULL DEFAULT '0.00' COMMENT '出价/milli',
+    `create_time` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `lastmodify`  timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `cc` (`campaign_id`, `country`),
+    KEY `country` (`country`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动国家出价表';
+
+
+CREATE TABLE `cp_campaign_log`
+(
+    `id`             int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `campaign_id`    int(10) unsigned NOT NULL,
+    `user_id`        int(10) unsigned NOT NULL DEFAULT '0',
+    `user_name`      varchar(20)      NOT NULL DEFAULT '',
+    `content`        longtext,
+    `change_content` longtext,
+    `create_time`    timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `campaign_id` (`campaign_id`),
+    KEY `user_id` (`user_id`),
+    KEY `create_time` (`create_time`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动修改记录';
+
+CREATE TABLE `cp_campaign_period`
+(
+    `campaign_id` int(10) unsigned NOT NULL,
+    `hour0`       int(10) unsigned NOT NULL DEFAULT '0' COMMENT '24位二进制,高位23点,低位0点, 周日',
+    `hour1`       int(10) unsigned NOT NULL DEFAULT '0' COMMENT '24位二进制,高位23点,低位0点, 周一',
+    `hour2`       int(10) unsigned NOT NULL DEFAULT '0' COMMENT '24位二进制,高位23点,低位0点, 周二',
+    `hour3`       int(10) unsigned NOT NULL DEFAULT '0' COMMENT '24位二进制,高位23点,低位0点, 周三',
+    `hour4`       int(10) unsigned NOT NULL DEFAULT '0' COMMENT '24位二进制,高位23点,低位0点, 周四',
+    `hour5`       int(10) unsigned NOT NULL DEFAULT '0' COMMENT '24位二进制,高位23点,低位0点, 周五',
+    `hour6`       int(10) unsigned NOT NULL DEFAULT '0' COMMENT '24位二进制,高位23点,低位0点, 周六',
+    `create_time` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `lastmodify`  timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`campaign_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动投放时间段';
+
+
+CREATE TABLE `cp_campaign_targeting`
+(
+    `id`          int(10) unsigned    NOT NULL AUTO_INCREMENT,
+    `campaign_id` int(10) unsigned    NOT NULL COMMENT '活动ID',
+    `type`        tinyint(3) unsigned NOT NULL COMMENT '定向类型. 0:PublisherApp 白名单,1:PublisherApp 黑名单,2:Placement 白名单,3:Placement 黑名单,4:Make 白名单,5:Make 黑名单,6:Brand 白名单,7:Brand 黑名单,8:Model 白名单,9:Model 黑名单,10:DeviceType 白名单,11:DeviceType 黑名单,12:ConnectionType(连接类型,二进制,从右到左(低位起) wifi,2G,3G,4G), 13:Mccmnc 白名单, 14: Mccmnc 黑名单, 15 :OSV 白名单表达式, 16 :OSV 黑名单表达式,17:国家白名单,18:国家黑明单',
+    `content`     varchar(255)        NOT NULL DEFAULT '' COMMENT '定向值',
+    `attr0`       varchar(255)                 DEFAULT NULL COMMENT '扩展属性0',
+    `create_time` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `lastmodify`  timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `cid_type_content` (`campaign_id`, `type`, `content`),
+    KEY `type` (`type`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动定向表, 按type区分定向类型.\n定向类型说明:\n0 :PublisherApp 白名单, 值为单个 publisher_app.id,\n1 :PublisherApp 黑名单, 值为单个 publisher_app.id,\n2 :Placement 白名单, 值为单个 publisher_placment.id,\n3 :Placement 黑名单, 值为单个 publisher_placment.id,\n4 :Make 白名单,\n5 :Make 黑名单,\n6 :Brand 白名单,\n7 :Brand 黑名单,\n8 :Model 白名单,\n9 :Model 黑名单,\n10 :DeviceType 白名单,\n11 :DeviceType 黑名单,\n12 :ConnectionType, 连接类型, 二进制, 从右到左(低位起) wifi, 2G, 3G, 4G,\n13 :Mccmnc 白名单,\n14: Mccmnc 黑名单,\n15 :OSV 白名单表达式,\n16 :OSV 黑名单表达式,\n17 :Country 白名单,\n18 :Country 黑名单';
+
+CREATE TABLE `cp_creative`
+(
+    `id`               int(10) unsigned    NOT NULL AUTO_INCREMENT COMMENT '创意ID',
+    `campaign_id`      int(10) unsigned    NOT NULL COMMENT 'cp_campaign.id 活动ID',
+    `publisher_id`     int(10) unsigned    NOT NULL COMMENT 'publisher.id',
+    `name`             varchar(50)         NOT NULL DEFAULT '' COMMENT '创意名称',
+    `type`             tinyint(2)          NOT NULL COMMENT '0:banner,1:native,2:video,3:cp',
+    `weight`           tinyint(4)          NOT NULL DEFAULT '1' COMMENT '权重',
+    `title`            varchar(200)                 DEFAULT '',
+    `descn`            text COMMENT '描述',
+    `auditor`          varchar(30)                  DEFAULT NULL COMMENT '审核人',
+    `audit_time`       timestamp           NULL     DEFAULT NULL COMMENT '审核时间',
+    `audit_memo`       varchar(50)                  DEFAULT '' COMMENT '审核意见',
+    `status`           tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '状态：{0:Pending，1:Active，2:Paused, 3:Deleted}',
+    `play_url`         varchar(500)                 DEFAULT NULL COMMENT '试玩地址',
+    `template`         int(10) unsigned    NOT NULL DEFAULT '0' COMMENT '初始模板, 0: 默认',
+    `endcard_template` int(10) unsigned    NOT NULL DEFAULT '0' COMMENT 'EndCard模版, 0: 默认',
+    `lastmodify`       timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `create_time`      timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`),
+    KEY `campaign_id` (`campaign_id`),
+    KEY `name` (`name`),
+    KEY `type` (`type`),
+    KEY `status` (`status`),
+    KEY `publisher_id` (`publisher_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广创意';
+
+CREATE TABLE `cp_creative_material`
+(
+    `creative_id` int(10) unsigned NOT NULL COMMENT 'cp_creative.id, 创意ID',
+    `material_id` int(10) unsigned NOT NULL COMMENT 'cp_material.id, 活动ID',
+    `create_time` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`material_id`, `creative_id`),
+    KEY `creative_id` (`creative_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动与创意关联';
+
+CREATE TABLE `cp_material`
+(
+    `id`                  int(10) unsigned    NOT NULL AUTO_INCREMENT,
+    `publisher_id`        int(10) unsigned    NOT NULL COMMENT '开发者ID',
+    `name`                varchar(190)        NOT NULL DEFAULT '' COMMENT '素材名称',
+    `md5sum`              varchar(32)         NOT NULL COMMENT '文件内容MD5',
+    `type`                tinyint(2)          NOT NULL DEFAULT '0' COMMENT '0:image,1:icon,2:video',
+    `url`                 varchar(1000)                DEFAULT '' COMMENT '文件路径',
+    `mime_type`           varchar(30)                  DEFAULT NULL COMMENT 'MIME',
+    `width`               smallint(5) unsigned         DEFAULT NULL COMMENT '文件宽',
+    `height`              smallint(5) unsigned         DEFAULT NULL COMMENT '文件高',
+    `size`                int(10) unsigned             DEFAULT NULL COMMENT '文件大小(字节)',
+    `video_duration`      int(10) unsigned             DEFAULT NULL COMMENT '视频时长',
+    `auditor`             varchar(30)                  DEFAULT NULL COMMENT '审核人',
+    `audit_time`          timestamp           NULL     DEFAULT NULL COMMENT '审核时间',
+    `status`              tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '0:Pending, 1:Active, 2:Paused, 3:Deleted',
+    `lastmodify`          timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `create_time`         timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `preserve_int0`       int(10)             NOT NULL DEFAULT '0' COMMENT '预留int0',
+    `preserve_int1`       int(10)             NOT NULL DEFAULT '0' COMMENT '预留int1',
+    `preserve_varchar50`  varchar(50)         NOT NULL DEFAULT '0' COMMENT '预留varchar50',
+    `preserve_varchar100` varchar(100)        NOT NULL DEFAULT '0' COMMENT '预留varchar100',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `publisher_id_md5` (`md5sum`, `publisher_id`),
+    KEY `wh` (`width`, `height`),
+    KEY `status` (`status`),
+    KEY `name` (`name`),
+    KEY `publisher_id` (`publisher_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广素材资源';
+
+CREATE TABLE `cp_material_app`
+(
+    `material_id` int(10) unsigned NOT NULL COMMENT '素材ID',
+    `app_id`      varchar(150)     NOT NULL DEFAULT '' COMMENT 'ios:app_id,android:package_name',
+    `create_time` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`app_id`, `material_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8 COMMENT ='交叉推广素材与App关联';
+
+CREATE TABLE `cp_template`
+(
+    `id`            int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name`          varchar(100)     NOT NULL DEFAULT '' COMMENT '模版名称',
+    `type`          tinyint(3)       NOT NULL DEFAULT '0' COMMENT '模板类型,0:Video;1:EndCard,2:Banner,3:Native,4:CrossPromotion',
+    `url`           varchar(50)      NOT NULL DEFAULT '' COMMENT 'SDK模版路径',
+    `width`         int(11)          NOT NULL DEFAULT '0' COMMENT '模版限制素材宽度',
+    `height`        int(11)          NOT NULL DEFAULT '0' COMMENT '模版限制素材高度',
+    `need_carousel` tinyint(3)       NOT NULL DEFAULT '0' COMMENT '是否支持轮播',
+    `status`        tinyint(3)       NOT NULL DEFAULT '1' COMMENT '0:OFF,1:ON',
+    `create_time`   timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `lastmodify`    timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE `cp_tmp_cid`
+(
+    `id` int(10) unsigned NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = MEMORY
+  DEFAULT CHARSET = utf8 COMMENT ='交叉推广临时CampaignID表, 用于 dtask 生成 PB';
+
+CREATE TABLE `cp_tmp_crid`
+(
+    `id` int(10) unsigned NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = MEMORY
+  DEFAULT CHARSET = utf8 COMMENT ='交叉推广临时CreativeID表, 用于 dtask 生成 PB';
+
+INSERT INTO `cp_template` (`id`, `name`, `type`, `url`, `width`, `height`, `need_carousel`, `status`, `create_time`,
+                           `lastmodify`)
+VALUES (1, 'Default Video', 0, '/cp/vd.html', 0, 0, 0, 1, '2019-03-20 11:35:57', '2020-11-26 22:35:02'),
+       (2, 'Default EndCard', 1, '/cp/ec.html', 0, 0, 0, 1, '2019-03-20 19:07:57', '2020-11-26 22:35:05'),
+       (3, 'Default Banner', 2, '/cp/ba.html', 320, 50, 0, 1, '2019-12-25 13:08:36', '2020-11-26 22:35:07'),
+       (4, 'Default Native', 3, '/cp/na.html', 1200, 627, 0, 1, '2019-12-27 17:14:19', '2020-11-26 22:35:08'),
+       (5, 'Default CP', 4, '/cp/cp.html', 0, 0, 0, 1, '2020-10-14 16:39:05', '2020-11-27 16:19:06');
+
