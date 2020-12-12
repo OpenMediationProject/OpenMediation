@@ -651,9 +651,7 @@ CREATE TABLE `cp_campaign`
     KEY `lastmodify` (`lastmodify`),
     KEY `app_id` (`app_id`(50)),
     KEY `billing_type` (`billing_type`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动';
-
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动';
 
 CREATE TABLE `cp_campaign_bidprice`
 (
@@ -666,9 +664,7 @@ CREATE TABLE `cp_campaign_bidprice`
     PRIMARY KEY (`id`),
     UNIQUE KEY `cc` (`campaign_id`, `country`),
     KEY `country` (`country`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动国家出价表';
-
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动国家出价表';
 
 CREATE TABLE `cp_campaign_log`
 (
@@ -683,8 +679,7 @@ CREATE TABLE `cp_campaign_log`
     KEY `campaign_id` (`campaign_id`),
     KEY `user_id` (`user_id`),
     KEY `create_time` (`create_time`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动修改记录';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动修改记录';
 
 CREATE TABLE `cp_campaign_period`
 (
@@ -699,9 +694,7 @@ CREATE TABLE `cp_campaign_period`
     `create_time` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `lastmodify`  timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`campaign_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动投放时间段';
-
+) ENGINE = InnoDB  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动投放时间段';
 
 CREATE TABLE `cp_campaign_targeting`
 (
@@ -715,8 +708,7 @@ CREATE TABLE `cp_campaign_targeting`
     PRIMARY KEY (`id`),
     UNIQUE KEY `cid_type_content` (`campaign_id`, `type`, `content`),
     KEY `type` (`type`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动定向表, 按type区分定向类型.\n定向类型说明:\n0 :PublisherApp 白名单, 值为单个 publisher_app.id,\n1 :PublisherApp 黑名单, 值为单个 publisher_app.id,\n2 :Placement 白名单, 值为单个 publisher_placment.id,\n3 :Placement 黑名单, 值为单个 publisher_placment.id,\n4 :Make 白名单,\n5 :Make 黑名单,\n6 :Brand 白名单,\n7 :Brand 黑名单,\n8 :Model 白名单,\n9 :Model 黑名单,\n10 :DeviceType 白名单,\n11 :DeviceType 黑名单,\n12 :ConnectionType, 连接类型, 二进制, 从右到左(低位起) wifi, 2G, 3G, 4G,\n13 :Mccmnc 白名单,\n14: Mccmnc 黑名单,\n15 :OSV 白名单表达式,\n16 :OSV 黑名单表达式,\n17 :Country 白名单,\n18 :Country 黑名单';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动定向表, 按type区分定向类型.\n定向类型说明:\n0 :PublisherApp 白名单, 值为单个 publisher_app.id,\n1 :PublisherApp 黑名单, 值为单个 publisher_app.id,\n2 :Placement 白名单, 值为单个 publisher_placment.id,\n3 :Placement 黑名单, 值为单个 publisher_placment.id,\n4 :Make 白名单,\n5 :Make 黑名单,\n6 :Brand 白名单,\n7 :Brand 黑名单,\n8 :Model 白名单,\n9 :Model 黑名单,\n10 :DeviceType 白名单,\n11 :DeviceType 黑名单,\n12 :ConnectionType, 连接类型, 二进制, 从右到左(低位起) wifi, 2G, 3G, 4G,\n13 :Mccmnc 白名单,\n14: Mccmnc 黑名单,\n15 :OSV 白名单表达式,\n16 :OSV 黑名单表达式,\n17 :Country 白名单,\n18 :Country 黑名单';
 
 CREATE TABLE `cp_creative`
 (
@@ -743,8 +735,7 @@ CREATE TABLE `cp_creative`
     KEY `type` (`type`),
     KEY `status` (`status`),
     KEY `publisher_id` (`publisher_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广创意';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广创意';
 
 CREATE TABLE `cp_creative_material`
 (
@@ -753,8 +744,7 @@ CREATE TABLE `cp_creative_material`
     `create_time` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`material_id`, `creative_id`),
     KEY `creative_id` (`creative_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动与创意关联';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广活动与创意关联';
 
 CREATE TABLE `cp_material`
 (
@@ -784,8 +774,7 @@ CREATE TABLE `cp_material`
     KEY `status` (`status`),
     KEY `name` (`name`),
     KEY `publisher_id` (`publisher_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广素材资源';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='交叉推广素材资源';
 
 CREATE TABLE `cp_material_app`
 (
@@ -793,8 +782,7 @@ CREATE TABLE `cp_material_app`
     `app_id`      varchar(150)     NOT NULL DEFAULT '' COMMENT 'ios:app_id,android:package_name',
     `create_time` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`app_id`, `material_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8 COMMENT ='交叉推广素材与App关联';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT ='交叉推广素材与App关联';
 
 CREATE TABLE `cp_template`
 (
@@ -809,28 +797,24 @@ CREATE TABLE `cp_template`
     `create_time`   timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `lastmodify`    timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 CREATE TABLE `cp_tmp_cid`
 (
     `id` int(10) unsigned NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = MEMORY
-  DEFAULT CHARSET = utf8 COMMENT ='交叉推广临时CampaignID表, 用于 dtask 生成 PB';
+) ENGINE = MEMORY DEFAULT CHARSET = utf8 COMMENT ='交叉推广临时CampaignID表, 用于 dtask 生成 PB';
 
 CREATE TABLE `cp_tmp_crid`
 (
     `id` int(10) unsigned NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = MEMORY
-  DEFAULT CHARSET = utf8 COMMENT ='交叉推广临时CreativeID表, 用于 dtask 生成 PB';
+) ENGINE = MEMORY DEFAULT CHARSET = utf8 COMMENT ='交叉推广临时CreativeID表, 用于 dtask 生成 PB';
 
-INSERT INTO `cp_template` (`id`, `name`, `type`, `url`, `width`, `height`, `need_carousel`, `status`, `create_time`,
-                           `lastmodify`)
-VALUES (1, 'Default Video', 0, '/cp/vd.html', 0, 0, 0, 1, '2019-03-20 11:35:57', '2020-11-26 22:35:02'),
-       (2, 'Default EndCard', 1, '/cp/ec.html', 0, 0, 0, 1, '2019-03-20 19:07:57', '2020-11-26 22:35:05'),
-       (3, 'Default Banner', 2, '/cp/ba.html', 320, 50, 0, 1, '2019-12-25 13:08:36', '2020-11-26 22:35:07'),
-       (4, 'Default Native', 3, '/cp/na.html', 1200, 627, 0, 1, '2019-12-27 17:14:19', '2020-11-26 22:35:08'),
-       (5, 'Default CP', 4, '/cp/cp.html', 0, 0, 0, 1, '2020-10-14 16:39:05', '2020-11-27 16:19:06');
+INSERT INTO `cp_template` (`id`, `name`, `type`, `url`, `width`, `height`, `need_carousel`, `status`)
+VALUES (1, 'Default Video', 0, 'https://cdn.xxx.com/cp/vd.html', 0, 0, 0, 1),
+       (2, 'Default EndCard', 1, 'https://cdn.xxx.com/cp/ec.html', 0, 0, 0, 1),
+       (3, 'Default Banner', 2, 'https://cdn.xxx.com/cp/ba.html', 320, 50, 0, 1),
+       (4, 'Default Native', 3, 'https://cdn.xxx.com/cp/na.html', 1200, 627, 0, 1),
+       (5, 'Default CP', 4, 'https://cdn.xxx.com/cp/cp.html', 0, 0, 0, 1);
 
