@@ -818,3 +818,6 @@ VALUES (1, 'Default Video', 0, 'https://cdn.xxx.com/cp/vd.html', 0, 0, 0, 1),
        (4, 'Default Native', 3, 'https://cdn.xxx.com/cp/na.html', 1200, 627, 0, 1),
        (5, 'Default CP', 4, 'https://cdn.xxx.com/cp/cp.html', 0, 0, 0, 1);
 
+-- 2020-12-30
+alter table cp_campaign 
+add column `open_type` tinyint(3) NOT NULL DEFAULT '0' COMMENT 'app open type,0:Store,1:Webview,2:System Brower,3:DB Link' after ad_domain;
