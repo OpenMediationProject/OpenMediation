@@ -821,3 +821,18 @@ VALUES (1, 'Default Video', 0, 'https://cdn.xxx.com/cp/vd.html', 0, 0, 0, 1),
 -- 2020-12-30
 alter table cp_campaign 
 add column `open_type` tinyint(3) NOT NULL DEFAULT '0' COMMENT 'app open type,0:Store,1:Webview,2:System Brower,3:DB Link' after ad_domain;
+
+-- 2020-12-31 v2.0
+ALTER TABLE report_adtiming DROP PRIMARY KEY,ADD PRIMARY KEY (`id`,`day`);
+ALTER TABLE report_adtiming PARTITION BY RANGE(TO_DAYS(`day`))(
+      PARTITION p202012 VALUES LESS THAN (TO_DAYS('2021-01-01'))
+);
+ALTER TABLE report_tencent DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE report_tencent DROP  PRIMARY KEY ,ADD PRIMARY KEY (`id`,`day`);
+ALTER TABLE report_tencent PARTITION BY RANGE(TO_DAYS(`day`))(
+   PARTITION p202012 VALUES LESS THAN (TO_DAYS('2021-01-01'))
+);				  
+		  
+		  
+		  
+		  
