@@ -832,7 +832,16 @@ ALTER TABLE report_tencent DROP  PRIMARY KEY ,ADD PRIMARY KEY (`id`,`day`);
 ALTER TABLE report_tencent PARTITION BY RANGE(TO_DAYS(`day`))(
    PARTITION p202012 VALUES LESS THAN (TO_DAYS('2021-01-01'))
 );				  
-		  
-		  
+
+-- 2021-01-27				       
+ALTER TABLE `report_adtiming` 
+ADD `app_pk_name` varchar(200) COLLATE utf8mb4_bin DEFAULT NULL AFTER `app_id`,
+ADD `app_key` VARCHAR(100)  NULL  DEFAULT NULL  AFTER `app_name`,
+ADD `os` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL AFTER `app_key`,
+ADD `request` INT  NOT NULL  DEFAULT '0'  AFTER `placement_name`,
+ADD `filled` INT  NOT NULL  DEFAULT '0'  AFTER `request`,
+ADD `video_start` int(11) NOT NULL DEFAULT '0' AFTER `click`,
+ADD `video_finish` int(11) NOT NULL DEFAULT '0' AFTER `video_start`;
+				       
 		  
 		  
