@@ -845,8 +845,8 @@ ADD `video_finish` int(11) NOT NULL DEFAULT '0' AFTER `video_start`;
 				       
 -- 2021-02-23		  
 INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `region_plat_type`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`, `bid_endpoint`)
-VALUES (20, X'5369674D6F62', X'5369674D6F62', 3, 15, 15, 15, NULL, X'5369674D6F62', 1, 1, NULL),
-       (21, X'4B75616953686F75', X'4B734164', 3, 15, 15, 15, NULL, X'4B75616953686F75', 1, 1, NULL);
+VALUES (20, 'SigMob', 'SigMob', 3, 15, 15, 15, NULL, 'SigMob', 1, 1, NULL),
+       (21, 'KuaiShou', 'KsAd', 3, 15, 15, 15, NULL, 'KuaiShou', 1, 1, NULL);
 CREATE TABLE `report_sigmob` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL DEFAULT '0000-00-00',
