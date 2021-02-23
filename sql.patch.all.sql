@@ -843,5 +843,51 @@ ADD `filled` INT  NOT NULL  DEFAULT '0'  AFTER `request`,
 ADD `video_start` int(11) NOT NULL DEFAULT '0' AFTER `click`,
 ADD `video_finish` int(11) NOT NULL DEFAULT '0' AFTER `video_start`;
 				       
-		  
-		  
+-- 2021-02-23		  
+INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `region_plat_type`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`, `bid_endpoint`)
+VALUES (20, X'5369674D6F62', X'5369674D6F62', 3, 15, 15, 15, NULL, X'5369674D6F62', 1, 1, NULL),
+       (21, X'4B75616953686F75', X'4B734164', 3, 15, 15, 15, NULL, X'4B75616953686F75', 1, 1, NULL);
+CREATE TABLE `report_sigmob` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL DEFAULT '0000-00-00',
+  `country` varchar(30) DEFAULT NULL COMMENT '国家',
+  `platform` tinyint(3) DEFAULT NULL COMMENT '操作系统平台，1：iOS，2：Android；',
+  `app_id` varchar(100) DEFAULT NULL COMMENT '应用唯一标识ID',
+  `app_name` varchar(200) DEFAULT NULL COMMENT '应用名称',
+  `placement_id` varchar(200) NOT NULL DEFAULT '0' COMMENT '广告单元唯一标识ID',
+  `placement_name` varchar(200) DEFAULT NULL COMMENT '广告单元名称',
+  `ad_type` varchar(10) DEFAULT NULL COMMENT '广告形式：1-激励视频，2-开屏，3-全屏视频；',
+  `impressions` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '展示次数',
+  `clicks` int(10) unsigned NOT NULL DEFAULT '0',
+  `revenue` decimal(5,2) unsigned NOT NULL DEFAULT '0.00',
+  `report_account_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'report_adnetwork_account.id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`date`),
+  KEY `date` (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+PARTITION BY RANGE (to_days(`date`))
+(PARTITION p202102 VALUES LESS THAN (738215) ENGINE = InnoDB,
+ PARTITION p202103 VALUES LESS THAN (738246) ENGINE = InnoDB);
+CREATE TABLE `report_kuaishou` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL DEFAULT '0000-00-00',
+  `country` varchar(10) NOT NULL DEFAULT 'CN',
+  `name` varchar(200) DEFAULT NULL COMMENT '公司名称',
+  `app_id` varchar(200) DEFAULT NULL COMMENT '媒体 id',
+  `position_id` varchar(100) DEFAULT NULL COMMENT '广告位 id',
+  `req_cnt` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '请求量',
+  `resp_cnt` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '返回量',
+  `impression` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '展现量',
+  `click` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '点击量',
+  `share` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '分成',
+  `ecpm` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '千次展现收入',
+  `access_key` varchar(100) DEFAULT '',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`),
+  KEY `day` (`day`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p202102 VALUES LESS THAN (738215) ENGINE = InnoDB,
+ PARTITION p202103 VALUES LESS THAN (738246) ENGINE = InnoDB);
