@@ -351,7 +351,7 @@ CREATE TABLE `report_tencent` (
   `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `day` (`day`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB ;
 
 -- 2020-11-06
 CREATE TABLE IF NOT EXISTS `stat_user_ltv` (
