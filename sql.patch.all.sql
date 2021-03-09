@@ -891,3 +891,48 @@ CREATE TABLE `report_kuaishou` (
 PARTITION BY RANGE (to_days(`day`))
 (PARTITION p202102 VALUES LESS THAN (738215) ENGINE = InnoDB,
  PARTITION p202103 VALUES LESS THAN (738246) ENGINE = InnoDB);
+
+
+-- 2021-03-09
+			  
+ALTER TABLE `stat_lr` 
+ADD COLUMN `app_version` VARCHAR(10) NULL AFTER `bid`,
+ADD COLUMN `sdk_version` VARCHAR(10) NULL AFTER `app_version`,
+ADD COLUMN `os_version` VARCHAR(10) NULL AFTER `sdk_version`,
+CHANGE COLUMN `create_time` `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `os_version`;
+
+ALTER TABLE `stat_dau` 
+ADD COLUMN `app_version` VARCHAR(10) NULL AFTER `deu`,
+ADD COLUMN `sdk_version` VARCHAR(10) NULL AFTER `app_version`,
+ADD COLUMN `os_version` VARCHAR(10) NULL AFTER `sdk_version`;
+
+ALTER TABLE `stat_dau_adn` 
+ADD COLUMN `app_version` VARCHAR(10) NULL AFTER `deu`,
+ADD COLUMN `sdk_version` VARCHAR(10) NULL AFTER `app_version`,
+ADD COLUMN `os_version` VARCHAR(10) NULL AFTER `sdk_version`;
+
+ALTER TABLE `stat_dau_adn_placement` 
+ADD COLUMN `app_version` VARCHAR(10) NULL AFTER `deu`,
+ADD COLUMN `sdk_version` VARCHAR(10) NULL AFTER `app_version`,
+ADD COLUMN `os_version` VARCHAR(10) NULL AFTER `sdk_version`;
+
+ALTER TABLE `stat_dau_instance` 
+ADD COLUMN `app_version` VARCHAR(10) NULL AFTER `deu`,
+ADD COLUMN `sdk_version` VARCHAR(10) NULL AFTER `app_version`,
+ADD COLUMN `os_version` VARCHAR(10) NULL AFTER `sdk_version`;
+
+ALTER TABLE `stat_dau_placement` 
+ADD COLUMN `app_version` VARCHAR(10) NULL AFTER `deu`,
+ADD COLUMN `sdk_version` VARCHAR(10) NULL AFTER `app_version`,
+ADD COLUMN `os_version` VARCHAR(10) NULL AFTER `sdk_version`;
+
+ALTER TABLE `om_placement_rule_segment` 
+ADD COLUMN `custom_tags` TEXT NULL AFTER `status`;
+
+INSERT INTO `om_message_dict` (`page`, `msg_key`, `value`, `name`, `status`)
+VALUES
+	('mediation', 'appv_exp_tip', 'Split multiple items by semicolon. Each item can be a single version or a version range (interval expressions, support opening and closing intervals).', '', 1),
+	('mediation', 'sdkv_exp_tip', 'Split multiple items by semicolon. Each item can be a single version or a version range (interval expressions, support opening and closing intervals).', '', 1),
+	('mediation', 'osv_exp_tip', 'Split multiple items by semicolon. Each item can be a single version or a version range (interval expressions, support opening and closing intervals).', '', 1);
+
+alter table om_publisher add column `impr_callback_switch` tinyint(3) NOT NULL DEFAULT '0' COMMENT '展现级回调开关，0:Off,1:On' after `owner_user_id`;
