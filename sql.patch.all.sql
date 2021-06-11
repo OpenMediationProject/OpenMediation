@@ -936,3 +936,6 @@ VALUES
 	('mediation', 'osv_exp_tip', 'Split multiple items by semicolon. Each item can be a single version or a version range (interval expressions, support opening and closing intervals).', '', 1);
 
 alter table om_publisher add column `impr_callback_switch` tinyint(3) NOT NULL DEFAULT '0' COMMENT '展现级回调开关，0:Off,1:On' after `owner_user_id`;
+
+-- 2021-06-11
+alter table om_server_dcenter add column `redis_servers` varchar(100) DEFAULT NULL COMMENT 'redis集群地址' after `kafka_servers`;
