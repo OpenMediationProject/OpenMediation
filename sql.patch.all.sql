@@ -939,3 +939,33 @@ alter table om_publisher add column `impr_callback_switch` tinyint(3) NOT NULL D
 
 -- 2021-06-11
 alter table om_server_dcenter add column `redis_servers` varchar(100) DEFAULT NULL COMMENT 'redis集群地址' after `kafka_servers`;
+
+-- 2021-06-30
+CREATE TABLE `report_pubnative` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL DEFAULT '0000-00-00',
+  `date` varchar(30) DEFAULT NULL COMMENT '数据返回日期',
+  `store_app_id` varchar(100) DEFAULT NULL COMMENT 'app id',
+  `app_name` varchar(100) DEFAULT NULL COMMENT 'App Name',
+  `zone_id` varchar(100) DEFAULT NULL COMMENT 'Zone ID',
+  `country` varchar(30) DEFAULT NULL COMMENT '国家',
+  `ad_server_requests` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'requests',
+  `ad_server_filled_requests` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'filled',
+  `impressions` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'impressions',
+  `clicks` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'clicks',
+  `revenues` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'revenues',
+  `report_api_key` varchar(100) DEFAULT '',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p202105 VALUES LESS THAN (738307) ENGINE = InnoDB,
+ PARTITION p202106 VALUES LESS THAN (738337) ENGINE = InnoDB,
+ PARTITION p202107 VALUES LESS THAN (738368) ENGINE = InnoDB,
+ PARTITION p202108 VALUES LESS THAN (738399) ENGINE = InnoDB,
+ PARTITION p202109 VALUES LESS THAN (738429) ENGINE = InnoDB,
+ PARTITION p202110 VALUES LESS THAN (738460) ENGINE = InnoDB,
+ PARTITION p202111 VALUES LESS THAN (738490) ENGINE = InnoDB,
+ PARTITION p202112 VALUES LESS THAN (738521) ENGINE = InnoDB,
+ PARTITION p202201 VALUES LESS THAN (738552) ENGINE = InnoDB);
