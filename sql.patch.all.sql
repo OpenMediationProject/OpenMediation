@@ -972,3 +972,8 @@ PARTITION BY RANGE (to_days(`day`))
  
 INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `region_plat_type`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`)
 VALUES (23, X'5075624E6174697665', X'5075624E6174697665', 3, 15, 15, 15, NULL, X'5075624E6174697665', 1, 1);
+
+alter table report_mopub
+add column `sdk_version` varchar(10) DEFAULT NULL COMMENT '新API新增维度' after `platform`,
+add column `adgroup_network_type` varchar(100) DEFAULT NULL COMMENT '新API新增维度' after `sdk_version`,
+add column `fills` int(11) NOT NULL DEFAULT '0' COMMENT '新API新增指标Fills' after `requests`;
