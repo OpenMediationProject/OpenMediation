@@ -969,3 +969,6 @@ PARTITION BY RANGE (to_days(`day`))
  PARTITION p202111 VALUES LESS THAN (738490) ENGINE = InnoDB,
  PARTITION p202112 VALUES LESS THAN (738521) ENGINE = InnoDB,
  PARTITION p202201 VALUES LESS THAN (738552) ENGINE = InnoDB);
+ 
+INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `region_plat_type`, `type`, `ios_adtype`, `android_adtype`, `sdk_version`, `descn`, `status`, `publisher_visible`)
+VALUES (23, X'5075624E6174697665', X'5075624E6174697665', 3, 15, 15, 15, NULL, X'5075624E6174697665', 1, 1);
