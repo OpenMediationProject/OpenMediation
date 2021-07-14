@@ -987,6 +987,11 @@ CREATE TABLE `om_ecpm_algorithm` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO `om_ecpm_algorithm` (`id`, `name`)
+VALUES
+(1, 'OLD_ECPM_ALG'),
+(2, 'ExponentialSmoothing');
+
 alter table `om_placement_rule` add column `algorithm_id` int(11) NOT NULL DEFAULT '2' COMMENT '算法ID om_ecpm_algorithm.id' after `priority`;
 
 alter table `om_instance_country` add column `manual_ecpm` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '手动设置instance+country ecpm' after `country`;
