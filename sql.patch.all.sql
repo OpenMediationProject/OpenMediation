@@ -977,3 +977,16 @@ alter table report_mopub
 add column `sdk_version` varchar(10) DEFAULT NULL COMMENT '新API新增维度' after `platform`,
 add column `adgroup_network_type` varchar(100) DEFAULT NULL COMMENT '新API新增维度' after `sdk_version`,
 add column `fills` int(11) NOT NULL DEFAULT '0' COMMENT '新API新增指标Fills' after `requests`;
+
+-- 2021-07-14
+CREATE TABLE `om_ecpm_algorithm` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT NULL COMMENT '算法名称',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table `om_placement_rule` add column `algorithm_id` int(11) NOT NULL DEFAULT '2' COMMENT '算法ID om_ecpm_algorithm.id' after `priority`;
+
+alter table `om_instance_country` add column `manual_ecpm` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '手动设置instance+country ecpm' after `country`;
