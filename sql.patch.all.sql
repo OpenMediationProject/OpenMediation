@@ -997,7 +997,7 @@ alter table `om_placement_rule` add column `algorithm_id` int(11) NOT NULL DEFAU
 alter table `om_instance_country` add column `manual_ecpm` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '手动设置instance+country ecpm' after `country`;
 
 -- 2021-07-21
-CREATE TABLE `stat_om_pubapp_country` (
+CREATE TABLE `stat_pub_app_country_uar` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pub_app_id` int(10) unsigned NOT NULL COMMENT '聚合 publisher_app_id',
   `country` char(3) NOT NULL,
