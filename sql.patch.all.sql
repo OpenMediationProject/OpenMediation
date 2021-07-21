@@ -958,7 +958,7 @@ CREATE TABLE `report_pubnative` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`day`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB 
 PARTITION BY RANGE (to_days(`day`))
 (PARTITION p202105 VALUES LESS THAN (738307) ENGINE = InnoDB,
  PARTITION p202106 VALUES LESS THAN (738337) ENGINE = InnoDB,
@@ -995,3 +995,21 @@ VALUES
 alter table `om_placement_rule` add column `algorithm_id` int(11) NOT NULL DEFAULT '2' COMMENT '算法ID om_ecpm_algorithm.id' after `priority`;
 
 alter table `om_instance_country` add column `manual_ecpm` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '手动设置instance+country ecpm' after `country`;
+
+-- 2021-07-21
+CREATE TABLE `stat_om_pubapp_country` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pub_app_id` int(10) unsigned NOT NULL COMMENT '聚合 publisher_app_id',
+  `country` char(3) NOT NULL,
+  `day` date NOT NULL COMMENT 'UTC day',
+  `uar1` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 10%',
+  `uar2` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 20%',
+  `uar3` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 30%',
+  `uar4` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 40%',
+  `uar5` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 50%',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `day` (`day`),
+  KEY `pub_app_id` (`pub_app_id`),
+  KEY `country` (`country`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 COMMENT='Google 太极统计支持';
