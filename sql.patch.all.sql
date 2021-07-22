@@ -1013,3 +1013,28 @@ CREATE TABLE `stat_pub_app_country_uar` (
   KEY `pub_app_id` (`pub_app_id`),
   KEY `country` (`country`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 COMMENT='Google 太极统计支持';
+
+-- 2021-7-22
+
+alter table om_publisher_app 
+add column `sdk_report_uar_regions` varchar(1000) DEFAULT NULL COMMENT 'Google太极计划, SDK 上报 UAR Region, 逗号分割多个, alpha3' after `impr_callback_switch`,
+add column `sdk_report_uar_manual` text COMMENT 'Google太极计划, SDK 上报 UAR Region 手动设置, 行分割: { "USA": [5,3,2,1,0.9], "IND": [10,6,3,1,0.3] }' after `sdk_report_uar_regions`,
+add column `sdk_report_uar_auto` text COMMENT 'Google太极计划, SDK 上报 UAR Region自动计算值, 行分割: { "USA": [5,3,2,1,0.9], "IND": [10,6,3,1,0.3] }' after `sdk_report_uar_manual`;
+
+
+CREATE TABLE `om_publisher_app_country_uar` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pub_app_id` int(10) unsigned NOT NULL COMMENT 'publisher_app_ID',
+  `country` char(3) NOT NULL,
+  `day` date NOT NULL COMMENT 'UTC day',
+  `uar1` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 10%',
+  `uar2` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 20%',
+  `uar3` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 30%',
+  `uar4` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 40%',
+  `uar5` decimal(16,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT 'UAR top 50%',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pc` (`pub_app_id`,`country`,`day`),
+  KEY `country` (`country`)
+) ENGINE=InnoDB COMMENT='Google太极PublisherApp国家TOP5 uar预估值';
