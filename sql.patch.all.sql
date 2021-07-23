@@ -1015,6 +1015,7 @@ CREATE TABLE `stat_pub_app_country_uar` (
 ) ENGINE=InnoDB AUTO_INCREMENT=16 COMMENT='Google 太极统计支持';
 
 -- 2021-7-22
+alter table om_publisher_app add column `impr_callback_switch` tinyint(3) NOT NULL DEFAULT '0' COMMENT '展现级回调开关，0:Off,1:On' after `available_countries`;
 
 alter table om_publisher_app 
 add column `sdk_report_uar_regions` varchar(1000) DEFAULT NULL COMMENT 'Google太极计划, SDK 上报 UAR Region, 逗号分割多个, alpha3' after `impr_callback_switch`,
