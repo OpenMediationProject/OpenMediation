@@ -1039,3 +1039,9 @@ CREATE TABLE `om_publisher_app_country_uar` (
   UNIQUE KEY `pc` (`pub_app_id`,`country`,`day`),
   KEY `country` (`country`)
 ) ENGINE=InnoDB COMMENT='Google太极PublisherApp国家TOP5 uar预估值';
+
+-- 2021-8-4
+
+alter table om_server_dcenter add column `cloud_type` varchar(10) DEFAULT NULL COMMENT '云厂商名称, aws or huawei' after `s3_secret_access_key`;
+alter table om_server_dcenter add column `cloud_config` text  COMMENT '云厂商服务配置, json格式' after `cloud_type`;
+
