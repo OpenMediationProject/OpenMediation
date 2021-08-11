@@ -1045,3 +1045,7 @@ CREATE TABLE `om_publisher_app_country_uar` (
 alter table om_server_dcenter add column `cloud_type` varchar(10) DEFAULT NULL COMMENT '云厂商名称, aws or huawei' after `s3_secret_access_key`;
 alter table om_server_dcenter add column `cloud_config` text  COMMENT '云厂商服务配置, json格式' after `cloud_type`;
 
+-- 2021-8-11 
+UPDATE `um_permission` SET `api_path` = '/publisher/update\n/publisher/account/update\n/publisher/account/delete\n/publisher/payment_info/update\n/report/google/refreshToken/save\n/report/callback/oauth2authorize\n/register/publisher/complete\n/publisher/verify/ads\n/publisher/promote/update\n/publisher/promote/get\n/report/admob/refreshToken/save' WHERE (`id` = '3102');
+
+
