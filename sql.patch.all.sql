@@ -1048,4 +1048,6 @@ alter table om_server_dcenter add column `cloud_config` text  COMMENT '云厂商
 -- 2021-8-11 
 UPDATE `um_permission` SET `api_path` = '/publisher/update\n/publisher/account/update\n/publisher/account/delete\n/publisher/payment_info/update\n/report/google/refreshToken/save\n/report/callback/oauth2authorize\n/register/publisher/complete\n/publisher/verify/ads\n/publisher/promote/update\n/publisher/promote/get\n/report/admob/refreshToken/save' WHERE (`id` = '3102');
 
-
+-- 2021-08-12
+alter table report_admob add column `account_key` varchar(200) DEFAULT '' COMMENT 'Admob PublisherId' after `page_views_rpm`;
+update report_admob set account_key=if(LOCATE('~',ad_client_id)>0, substring(ad_client_id, LOCATE('ca-app-',ad_client_id) + 7, LOCATE('~', ad_client_id)-8), substring(ad_client_id,LOCATE('ca-app-',ad_client_id) + 7));
