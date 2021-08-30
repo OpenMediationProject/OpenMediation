@@ -1067,13 +1067,11 @@ CREATE TABLE `om_placement_rule_group` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 truncate table om_placement_rule_group;
 
 insert into om_placement_rule_group (rule_id,name,group_level,auto_switch) select id,'Tier 1' name,1 group_level,auto_opt from om_placement_rule;
-insert into om_placement_rule_group (rule_id,name,group_level,auto_switch) select id,'Tier 2' name,2 group_level,auto_opt from om_placement_rule;
-insert into om_placement_rule_group (rule_id,name,group_level,auto_switch) select id,'Tier 3' name,3 group_level,auto_opt from om_placement_rule;
 update om_placement_rule_instance  set group_id = 0;
 
 UPDATE om_placement_rule_instance a
@@ -1090,3 +1088,9 @@ ALTER TABLE `stat_lr` ADD COLUMN `rule_id` INT(10) NOT NULL DEFAULT '0' AFTER `b
 
 UPDATE `um_permission` SET `api_path` = '/mediation/segment/list\n/mediation/segment/instance/list\n/mediation/segment/rule/instance/list\n/placement/get\n/mediation/segment/get\n/mediation/rule/instance_list' WHERE (`id` = '1602');
 
+alter table om_adnetwork 
+add column `bid_type` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0:非Bid,1:s2s,2:c2s,3:非标c2s' after `bid_endpoint`,
+add column `expired_time` int(11) NOT NULL DEFAULT '0' COMMENT '广告失效时间配置，0:无失效超时，>0有失效超时’ after `bid_type`;
+
+update om_adnetwork set bid_type=1 where id in (1,3,5,14,19);
+update om_adnetwork set bid_type=3 where id in (17,23);
