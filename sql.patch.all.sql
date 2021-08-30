@@ -1051,3 +1051,42 @@ UPDATE `um_permission` SET `api_path` = '/publisher/update\n/publisher/account/u
 -- 2021-08-12
 alter table report_admob add column `account_key` varchar(200) DEFAULT '' COMMENT 'Admob PublisherId' after `page_views_rpm`;
 update report_admob set account_key=if(LOCATE('~',ad_client_id)>0, substring(ad_client_id, LOCATE('ca-app-',ad_client_id) + 7, LOCATE('~', ad_client_id)-8), substring(ad_client_id,LOCATE('ca-app-',ad_client_id) + 7));
+
+-- 2021-08-30
+UPDATE `um_permission` SET `api_path` = '/adnetwork/app/create\n/instance/create\n/create_instances' WHERE (`id` = '1501');
+
+ALTER TABLE `stat_lr` ADD COLUMN `rule_id` INT(10) NULL DEFAULT '0' AFTER `os_version`;
+ALTER TABLE `om_placement_rule_instance` ADD COLUMN `group_id` INT(10) NOT NULL DEFAULT '0' AFTER `status`;
+
+CREATE TABLE `om_placement_rule_group` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `rule_id` int(11) DEFAULT '0',
+  `name` varchar(100) DEFAULT NULL,
+  `group_level` tinyint(3) NOT NULL DEFAULT '1' COMMENT '分组级别1:trip1,2:trip2, 3:trip3',
+  `auto_switch` tinyint(3) NOT NULL DEFAULT '0' COMMENT '自动优化开关,0:OFF;1:ON',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4;
+
+truncate table om_placement_rule_group;
+
+insert into om_placement_rule_group (rule_id,name,group_level,auto_switch) select id,'Tier 1' name,1 group_level,auto_opt from om_placement_rule;
+insert into om_placement_rule_group (rule_id,name,group_level,auto_switch) select id,'Tier 2' name,2 group_level,auto_opt from om_placement_rule;
+insert into om_placement_rule_group (rule_id,name,group_level,auto_switch) select id,'Tier 3' name,3 group_level,auto_opt from om_placement_rule;
+update om_placement_rule_instance  set group_id = 0;
+
+UPDATE om_placement_rule_instance a
+        INNER JOIN
+    om_placement_rule_group b ON (a.rule_id = b.rule_id)
+        LEFT JOIN
+    om_instance AS mp ON a.instance_id = mp.id
+SET 
+    a.group_id = b.id
+where mp.hb_status != 1;
+
+ALTER TABLE `om_instance` ADD COLUMN `manual_ecpm` DECIMAL(16,4) NOT NULL DEFAULT '0' AFTER `hb_status`;
+ALTER TABLE `stat_lr` ADD COLUMN `rule_id` INT(10) NOT NULL DEFAULT '0' AFTER `bid`;
+
+UPDATE `um_permission` SET `api_path` = '/mediation/segment/list\n/mediation/segment/instance/list\n/mediation/segment/rule/instance/list\n/placement/get\n/mediation/segment/get\n/mediation/rule/instance_list' WHERE (`id` = '1602');
+
