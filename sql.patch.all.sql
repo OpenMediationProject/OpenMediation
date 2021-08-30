@@ -1083,7 +1083,6 @@ SET
     a.group_id = b.id
 where mp.hb_status != 1;
 
-ALTER TABLE `om_instance` ADD COLUMN `manual_ecpm` DECIMAL(16,4) NOT NULL DEFAULT '0' AFTER `hb_status`;
 ALTER TABLE `stat_lr` ADD COLUMN `rule_id` INT(10) NOT NULL DEFAULT '0' AFTER `bid`;
 
 UPDATE `um_permission` SET `api_path` = '/mediation/segment/list\n/mediation/segment/instance/list\n/mediation/segment/rule/instance/list\n/placement/get\n/mediation/segment/get\n/mediation/rule/instance_list' WHERE (`id` = '1602');
