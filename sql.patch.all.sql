@@ -1093,3 +1093,54 @@ add column `expired_time` int(11) NOT NULL DEFAULT '0' COMMENT '广告失效时�
 
 update om_adnetwork set bid_type=1 where id in (1,3,5,14,19);
 update om_adnetwork set bid_type=3 where id in (17,23);
+
+-- 2021-10-12
+alter table `om_placement_rule` add column `ab_test` tinyint(3) NOT NULL DEFAULT '0' COMMENT 'A/B Test开关0:Off,1:On' after `segment_id`;
+alter table `om_placement_rule_group` add column `ab_test` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0:NO Setting,1:A,2:B' after `auto_switch`;
+alter table `om_placement_rule_instance` add column `ab_test` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0:NO Setting,1:A,2:B' after `group_id`;
+CREATE TABLE `om_placement_rule_abt` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `rule_id` int(11) NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'ABTest' COMMENT 'A/B Test目标',
+  `a_per` int(10) unsigned NOT NULL DEFAULT '50' COMMENT 'A占百分比',
+  `b_per` int(10) unsigned NOT NULL DEFAULT '50' COMMENT 'B占百分比',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '0:结束，1:运行中',
+  `result_ab` int(11) NOT NULL DEFAULT '0' COMMENT '0:None,1:A,2:B',
+  `end_time` timestamp NULL DEFAULT NULL,
+  `rule_conf` json DEFAULT NULL,
+  `instance_conf` json DEFAULT NULL,
+  `report` json DEFAULT NULL,
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Waterfall rule 级 abtest 配置';
+
+ALTER TABLE `open_mediation`.`stat_lr` 
+ADD COLUMN `abt_id` INT(10) NOT NULL DEFAULT '0' AFTER `abt`;
+
+CREATE TABLE `stat_dau_abtest` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL COMMENT 'timezone: UTC',
+  `publisher_id` int(10) unsigned DEFAULT '0' COMMENT 'publisher.id',
+  `pub_app_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'publisher_app.id',
+  `platform` tinyint(2) unsigned NOT NULL COMMENT '0:iOS,1:Android',
+  `abt` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0:None,1:A,2:B',
+  `abt_id` int(10) NOT NULL DEFAULT '0',
+  `country` varchar(4) DEFAULT NULL COMMENT 'Country a2',
+  `ip_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ip的个数',
+  `did_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'gaid or idfa 的个数',
+  `dau` int(10) unsigned NOT NULL DEFAULT '0',
+  `deu` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当日打开了App且观看了广告的人数',
+  `app_version` varchar(10) DEFAULT NULL,
+  `sdk_version` varchar(10) DEFAULT NULL,
+  `os_version` varchar(10) DEFAULT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`),
+  KEY `day` (`day`),
+  KEY `publisher_id` (`publisher_id`),
+  KEY `pub_app_id` (`pub_app_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='DAU & DEU, partition by day'
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p20211012 VALUES LESS THAN (738441) ENGINE = InnoDB,
+ PARTITION p20211013 VALUES LESS THAN (738442) ENGINE = InnoDB);
+
