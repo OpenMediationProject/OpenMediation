@@ -1144,3 +1144,10 @@ PARTITION BY RANGE (to_days(`day`))
 (PARTITION p20211012 VALUES LESS THAN (738441) ENGINE = InnoDB,
  PARTITION p20211013 VALUES LESS THAN (738442) ENGINE = InnoDB);
 
+ALTER TABLE `om_placement_rule_instance` 
+DROP INDEX `rule_instance` ,
+ADD UNIQUE INDEX `rule_instance` (`rule_id`, `instance_id`, `ab_test`);
+
+UPDATE `um_permission` SET `api_path` = '/mediation/segment/list\n/mediation/segment/instance/list\n/mediation/segment/rule/instance/list\n/placement/get\n/mediation/segment/get\n/mediation/rule/instance_list\n/mediation/get_abtest_report' WHERE (`id` = '1602');
+
+UPDATE `um_permission` SET `api_path` = '/mediation/segment/save\n/mediation/segment/rule/delete\n/mediation/segment/resort/priority\n/mediation/rule/resort/priority\n/mediation/segment/update\n/mediation/segment/rule/update\n/mediation/segment/rule/instance/update\n/mediation/segment/rule/instance/create\n/mediation/segment/rule/instance/delete\n/mediation/segment/get\n/mediation/segment/rule/instance/delete\n/mediation/rule/resort/priority\n/mediation/segment/rule/delete\n/placement/get\n/mediation/stop_abtest' WHERE (`id` = '1600');
