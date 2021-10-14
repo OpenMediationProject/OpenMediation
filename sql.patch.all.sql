@@ -1151,3 +1151,16 @@ ADD UNIQUE INDEX `rule_instance` (`rule_id`, `instance_id`, `ab_test`);
 UPDATE `um_permission` SET `api_path` = '/mediation/segment/list\n/mediation/segment/instance/list\n/mediation/segment/rule/instance/list\n/placement/get\n/mediation/segment/get\n/mediation/rule/instance_list\n/mediation/get_abtest_report' WHERE (`id` = '1602');
 
 UPDATE `um_permission` SET `api_path` = '/mediation/segment/save\n/mediation/segment/rule/delete\n/mediation/segment/resort/priority\n/mediation/rule/resort/priority\n/mediation/segment/update\n/mediation/segment/rule/update\n/mediation/segment/rule/instance/update\n/mediation/segment/rule/instance/create\n/mediation/segment/rule/instance/delete\n/mediation/segment/get\n/mediation/segment/rule/instance/delete\n/mediation/rule/resort/priority\n/mediation/segment/rule/delete\n/placement/get\n/mediation/stop_abtest' WHERE (`id` = '1600');
+
+CREATE TABLE `om_action_log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` tinyint(3) NOT NULL DEFAULT '0' COMMENT '1:rule mediation',
+  `type_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `type_sub_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(3) unsigned NOT NULL DEFAULT '0',
+  `user_name` varchar(20) NOT NULL DEFAULT '',
+  `content` varchar(500) DEFAULT NULL,
+  `change_content` text,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='人工修改记录';
