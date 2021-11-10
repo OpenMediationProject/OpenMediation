@@ -1164,3 +1164,29 @@ CREATE TABLE `om_action_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='人工修改记录';
+
+-- 2021-11-10
+CREATE TABLE `report_shareit` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL DEFAULT '0000-00-00',
+  `country` varchar(30) DEFAULT NULL COMMENT '国家',
+  `placement` varchar(10) DEFAULT NULL COMMENT 'placement name',
+  `request` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of requests',
+  `fill` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of fills',
+  `fill_rate` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '点击次数/展示次数',
+  `impression` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of impression',
+  `click` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of click',
+  `ctr` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '点击次数/展示次数',
+  `revenue` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT 'money earned',
+  `ecpm` decimal(16,4) NOT NULL DEFAULT '0.0000' COMMENT '每千次展示收益',
+  `report_account_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'report_adnetwork_account.id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`day`),
+  KEY `report_account_id` (`report_account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+PARTITION BY RANGE (to_days(`day`))
+(PARTITION p202111 VALUES LESS THAN (738490) ENGINE = InnoDB,
+ PARTITION p202112 VALUES LESS THAN (738521) ENGINE = InnoDB);
+
+INSERT INTO `om_adnetwork` (`id`, `name`, `class_name`, `region_plat_type`, `type`, `ios_adtype`, `android_adtype`, `descn`, `status`, `publisher_visible`, `bid_type`, `expired_time`) VALUES ('27', 'SanAds', 'SanAds', '3', '15', '15', '15', 'SHAREit', '1', '1', '0', '0');
